@@ -84,9 +84,9 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'My Site',
+        title: 'Agrinet Docs',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Agrinet Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -114,6 +114,18 @@ const config = {
                 label: 'Tutorial',
                 to: '/docs/intro',
               },
+              {
+                label: 'Onbaording',
+                to: '/docs/onboarding',
+              },
+              {
+                label: 'Federation Guide',
+                to: '/docs/federation-guide',
+              },
+              {
+                label: 'API Testing',
+                to: '/docs/api-testing',
+              }
             ],
           },
           {
@@ -124,12 +136,32 @@ const config = {
                 href: 'https://stackoverflow.com/questions/tagged/docusaurus',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Slack',
+                href: 'https://ntari.slack.com',
               },
               {
                 label: 'X',
-                href: 'https://x.com/docusaurus',
+                href: 'https://x.com/ntariorg',
+              },
+              {
+                label: 'Instagram',
+                href: 'https://www.instagram.com/ntaricommunity/',
+              },
+              {
+                label: 'TikTok',
+                href: 'https://www.tiktok.com/@networktheory',
+              },
+              {
+                label: 'Facebook',
+                href: 'https://www.facebook.com/networktheory',
+              },
+              {
+                label: 'Reddit',
+                href: 'https://www.reddit.com/r/NTARIorg/',
+              },
+              {
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/company/ntari/',
               },
             ],
           },
@@ -141,8 +173,16 @@ const config = {
                 to: '/blog',
               },
               {
+                laebl: 'Privacy',       // create /src/pages/privacy.mdx if you keep this
+                to: '/privacy'
+              },
+              {
+                label: 'Terms',         // create /src/pages/terms.mdx if you keep this
+                to: '/terms'
+              },
+              {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/NTARI-RAND/Agrinet',
               },
             ],
           },
@@ -153,6 +193,9 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
+
+      // Optional: enable Mermaid diagrams if you plan to use them
+      // themes: ['@docusaurus/theme-mermaid'],
     }),
 };
 
