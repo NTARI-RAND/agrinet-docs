@@ -20,7 +20,19 @@ const sidebars = {
 
   // But you can create a sidebar manually
   // sidebars.js
-  docs: ["intro", "onboarding", "federation-guide", "api-testing"],
+  /*
+  tutorialSidebar: [
+    'intro',
+    'onboarding',
+    'federation-guide',
+    'api-testing',
+    {
+      type: 'category',
+      label: 'Tutorial',
+      items: ['tutorial-basics/create-a-document'],
+    },
+  ],
+  */
 };
 
 export default sidebars;

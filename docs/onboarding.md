@@ -65,15 +65,15 @@ node scripts/gen-mceliece.js
 
 If no script is available, create one with [`node-mceliece`](https://www.npmjs.com/package/node-mceliece):
 
-```javascript title="scripts/gen-mceliece.js"
-const mceliece = require('node-mceliece');
-const fs = require('fs');
+```javascript title='scripts/gen-mceliece.js'
+const mceliece = require("node-mceliece");
+const fs = require("fs");
 
 const { publicKey, privateKey } = mceliece.keyPair();
-fs.writeFileSync('keys/mceliece_public.key', publicKey);
-fs.writeFileSync('keys/mceliece_private.key', privateKey);
+fs.writeFileSync("keys/mceliece_public.key", publicKey);
+fs.writeFileSync("keys/mceliece_private.key", privateKey);
 
-console.log('McEliece key pair generated in /keys/');
+console.log("McEliece key pair generated in /keys/");
 ```
 
 :::caution
@@ -84,7 +84,7 @@ Treat private keys as secrets and never commit them to version control.
 
 The UI contract captures how frontend clients interact with your federation node.
 
-```javascript title="contracts/uiContract.js"
+```javascript title='contracts/uiContract.js'
 /**
  * UI Contract Example
  * Describes methods exposed to the UI for interacting with the federation node.
@@ -111,22 +111,22 @@ module.exports = {
 ## Final Checklist
 
 <Tabs>
-  <TabItem value="tests" label="Run tests">
+  <TabItem value='tests' label='Run tests'>
 
-  - Execute end-to-end tests against at least one peer node.
-  - Confirm Mycelium log output reports a healthy connection.
-
-  </TabItem>
-  <TabItem value="security" label="Secure keys">
-
-  - Store generated keys in a secure secrets manager.
-  - Rotate credentials on a regular cadence.
+- Execute end-to-end tests against at least one peer node.
+- Confirm Mycelium log output reports a healthy connection.
 
   </TabItem>
-  <TabItem value="integration" label="Wire the UI">
+  <TabItem value='security' label='Secure keys'>
 
-  - Ensure your frontend calls the UI contract methods consistently.
-  - Document the API surface for downstream teams.
+- Store generated keys in a secure secrets manager.
+- Rotate credentials on a regular cadence.
+
+  </TabItem>
+  <TabItem value='integration' label='Wire the UI'>
+
+- Ensure your frontend calls the UI contract methods consistently.
+- Document the API surface for downstream teams.
 
   </TabItem>
 </Tabs>
