@@ -27,8 +27,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren"t using GitHub pages, you don"t need these.
-  organizationName: "NTARI-RAND/NetworkTheoryAppliedResearchInstitute", // Usually your GitHub org/user name.
-  projectName: "Agrinet", // Usually your repo name.
+  organizationName: "NTARI-RAND", // Usually your GitHub org/user name.
+  projectName: "agrinet-docs", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -50,6 +50,7 @@ const config = {
           sidebarPath: "./sidebars.js",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
+          // routeBasePath: '/',
           editUrl: "https://github.com/NTARI-RAND/agrinet-docs",
         },
         blog: {
@@ -83,118 +84,48 @@ const config = {
       },
       navbar: {
         title: "Agrinet Docs",
-        logo: {
-          alt: "Agrinet Logo",
-          src: "img/logo.svg",
-        },
+        logo: { alt: "Agrinet Logo", src: "img/logo.svg" },
         items: [
-          {
-            type: "docSidebar",
-            sidebarId: "tutorialSidebar",
-            position: "left",
-            label: "Tutorial",
-          },
+          { type: "docSidebar", sidebarId: "tutorialSidebar", position: "left", label: "Tutorial", },
           { to: "/blog", label: "Blog", position: "left" },
-          {
-            href: "https://github.com/NTARI-RAND/agrinet-docs",
-            label: "GitHub",
-            position: "right",
-          },
+          { href: "https://github.com/NTARI-RAND/agrinet-docs", label: "GitHub", position: "right", },
         ],
       },
       footer: {
-        style: "dark",
+        style: 'dark',
         links: [
           {
-            title: "Docs",
+            title: 'Docs',
             items: [
-              {
-                label: "Tutorial",
-                to: "/docs/intro",
-              },
-              {
-                label: "Onbaording",
-                to: "/docs/onboarding",
-              },
-              {
-                label: "Federation Guide",
-                to: "/docs/federation-guide",
-              },
-              {
-                label: "API Testing",
-                to: "/docs/api-testing",
-              },
+              { label: 'Tutorial', to: '/docs/intro' },
+              { label: 'Onboarding', to: '/docs/onboarding' },
+              { label: 'Federation Guide', to: '/docs/federation-guide' },
+              { label: 'API Testing', to: '/docs/api-testing' },
             ],
           },
           {
-            title: "Community",
+            title: 'Community',
             items: [
-              {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
-              },
-              {
-                label: "Slack",
-                href: "https://ntari.slack.com",
-              },
-              {
-                label: "X",
-                href: "https://x.com/ntariorg",
-              },
-              {
-                label: "Instagram",
-                href: "https://www.instagram.com/ntaricommunity/",
-              },
-              {
-                label: "TikTok",
-                href: "https://www.tiktok.com/@networktheory",
-              },
-              {
-                label: "Facebook",
-                href: "https://www.facebook.com/networktheory",
-              },
-              {
-                label: "Reddit",
-                href: "https://www.reddit.com/r/NTARIorg/",
-              },
-              {
-                label: "LinkedIn",
-                href: "https://www.linkedin.com/company/ntari/",
-              },
+              { label: 'Stack Overflow', href: 'https://stackoverflow.com/questions/tagged/docusaurus' },
+              { label: 'Slack', href: 'https://ntari.slack.com' },
+              { label: 'X', href: 'https://x.com/ntariorg' },
+              { label: 'Instagram', href: 'https://www.instagram.com/ntaricommunity/' },
+              { label: 'TikTok', href: 'https://www.tiktok.com/@networktheory' },
+              { label: 'Facebook', href: 'https://www.facebook.com/networktheory' },
+              { label: 'Reddit', href: 'https://www.reddit.com/r/NTARIorg/' },
+              { label: 'LinkedIn', href: 'https://www.linkedin.com/company/ntari/' },
             ],
           },
           {
-            title: "More",
+            title: 'More',
             items: [
-              {
-                label: "Blog",
-                to: "/blog",
-              },
-              {
-                laebl: "Privacy", // create /src/pages/privacy.mdx if you keep this
-                to: "/privacy",
-              },
-              {
-                label: "Terms", // create /src/pages/terms.mdx if you keep this
-                to: "/terms",
-              },
-              {
-                label: "GitHub",
-                href: "https://github.com/NTARI-RAND/agrinet-docs",
-              },
+              // keep Blog only if blog plugin is enabled
+              // { label: 'Blog', to: '/blog' },
+              { label: 'Privacy', to: '/privacy' },
+              { label: 'Terms', to: '/terms' },
+              { label: 'GitHub', href: 'https://github.com/NTARI-RAND/Agrinet' },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
-      },
-      prism: {
-        theme: prismThemes.github,
-        darkTheme: prismThemes.dracula,
-      },
-
-      // Optional: enable Mermaid diagrams if you plan to use them
-      // themes: ["@docusaurus/theme-mermaid"],
-    }),
-};
-
-export default config;
+        copyright: `© ${new Date().getFullYear()} NTARI – Network Theory Applied Research Institute.`,
+      }
