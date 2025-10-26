@@ -180,7 +180,7 @@ const config = {
               },
               {
                 label: "GitHub",
-                href: "https://github.com/NTARI-RAND/Agrinet",
+                href: "https://github.com/NTARI-RAND/agrinet-docs",
               },
             ],
           },
