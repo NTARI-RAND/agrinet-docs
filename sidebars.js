@@ -1,6 +1,6 @@
 // @ts-check
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+// This runs in Node.js - Don"t use client-side code here (browser APIs, JSX...)
 
 /**
  * Creating a sidebar enables you to:
@@ -12,7 +12,7 @@
 
  Create as many sidebars as you want.
 
- @type {import('@docusaurus/plugin-content-docs').SidebarsConfig}
+ @type {import("@docusaurus/plugin-content-docs").SidebarsConfig}
  */
 const sidebars = {
   // By default, Docusaurus generates a sidebar from the docs folder structure
@@ -22,14 +22,14 @@ const sidebars = {
   // sidebars.js
   /*
   tutorialSidebar: [
-    'intro',
-    'onboarding',
-    'federation-guide',
-    'api-testing',
+    "intro",
+    "onboarding",
+    "federation-guide",
+    "api-testing",
     {
-      type: 'category',
-      label: 'Tutorial',
-      items: ['tutorial-basics/create-a-document'],
+      type: "category",
+      label: "Tutorial",
+      items: ["tutorial-basics/create-a-document"],
     },
   ],
   */

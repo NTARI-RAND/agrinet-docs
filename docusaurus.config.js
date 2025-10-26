@@ -6,9 +6,9 @@
 
 import { themes as prismThemes } from "prism-react-renderer";
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+// This runs in Node.js - Don"t use client-side code here (browser APIs, JSX...)
 
-/** @type {import('@docusaurus/types').Config} */
+/** @type {import("@docusaurus/types").Config} */
 const config = {
   title: "Agrinet Docs",
   tagline: "Fruitful App & Agrinet Engine",
@@ -22,20 +22,20 @@ const config = {
   // Set the production url of your site here
   url: "https://your-docusaurus-site.example.com",
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
+  // For GitHub pages deployment, it is often "/<projectName>/"
   baseUrl: "/",
 
   // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
+  // If you aren"t using GitHub pages, you don"t need these.
   organizationName: "NTARI-RAND/NetworkTheoryAppliedResearchInstitute", // Usually your GitHub org/user name.
   projectName: "Agrinet", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
 
-  // Even if you don't use internationalization, you can use this field to set
+  // Even if you don"t use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace 'en' with 'zh-Hans'.
+  // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
@@ -44,12 +44,12 @@ const config = {
   presets: [
     [
       "classic",
-      /** @type {import('@docusaurus/preset-classic').Options} */
+      /** @type {import("@docusaurus/preset-classic").Options} */
       ({
         docs: {
           sidebarPath: "./sidebars.js",
           // Please change this to your repo.
-          // Remove this to remove the 'edit this page' links.
+          // Remove this to remove the "edit this page" links.
           editUrl: "https://github.com/NTARI-RAND/agrinet-docs",
         },
         blog: {
@@ -59,7 +59,7 @@ const config = {
             xslt: true,
           },
           // Please change this to your repo.
-          // Remove this to remove the 'edit this page' links.
+          // Remove this to remove the "edit this page" links.
           editUrl: "https://github.com/NTARI-RAND/agrinet-docs",
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
@@ -74,9 +74,9 @@ const config = {
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    /** @type {import("@docusaurus/preset-classic").ThemeConfig} */
     ({
-      // Replace with your project's social card
+      // Replace with your project"s social card
       image: "img/docusaurus-social-card.jpg",
       colorMode: {
         respectPrefersColorScheme: true,
@@ -193,7 +193,7 @@ const config = {
       },
 
       // Optional: enable Mermaid diagrams if you plan to use them
-      // themes: ['@docusaurus/theme-mermaid'],
+      // themes: ["@docusaurus/theme-mermaid"],
     }),
 };
 

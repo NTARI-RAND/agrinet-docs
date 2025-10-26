@@ -18,7 +18,7 @@ This launch kit equips Agrinet node operators with everything needed to deploy, 
 
 Use the following script to bootstrap a production-ready node:
 
-```bash title='install.sh'
+```bash title="install.sh"
 #!/bin/bash
 sudo apt update && sudo apt install -y nodejs npm git dynamodb
 
@@ -38,7 +38,7 @@ pm save
 For automated federation syncs, schedule a cron job:
 
 ```bash
-*/30 * * * * curl -s '$BACKEND_URL/federation/sync'
+*/30 * * * * curl -s "$BACKEND_URL/federation/sync"
 ```
 
 :::note
@@ -55,9 +55,9 @@ Set `BACKEND_URL` to your deployed backend URL. The cron job keeps your node in 
 ```bash
 POST /federation/node/register
 {
-  'nodeUrl': 'https://node.example.org',
-  'region': 'Pacific NW',
-  'contactEmail': 'admin@node.org'
+  "nodeUrl": "https://node.example.org",
+  "region": "Pacific NW",
+  "contactEmail": "admin@node.org"
 }
 ```
 
@@ -158,4 +158,4 @@ npm install chalk cli-table3 axios
 }
 ```
 
-You're now ready to launch your Agrinet node and collaborate with the federation community.
+You"re now ready to launch your Agrinet node and collaborate with the federation community.

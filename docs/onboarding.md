@@ -3,8 +3,8 @@ title: Federation Node Onboarding
 sidebar_position: 2
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 This guide walks you through the essentials for provisioning a new Agrinet federation node, syncing with the Mycelium network, generating McEliece keys, and wiring up a UI contract.
 
@@ -65,7 +65,7 @@ node scripts/gen-mceliece.js
 
 If no script is available, create one with [`node-mceliece`](https://www.npmjs.com/package/node-mceliece):
 
-```javascript title='scripts/gen-mceliece.js'
+```javascript title="scripts/gen-mceliece.js"
 const mceliece = require("node-mceliece");
 const fs = require("fs");
 
@@ -84,7 +84,7 @@ Treat private keys as secrets and never commit them to version control.
 
 The UI contract captures how frontend clients interact with your federation node.
 
-```javascript title='contracts/uiContract.js'
+```javascript title="contracts/uiContract.js"
 /**
  * UI Contract Example
  * Describes methods exposed to the UI for interacting with the federation node.
@@ -111,19 +111,19 @@ module.exports = {
 ## Final Checklist
 
 <Tabs>
-  <TabItem value='tests' label='Run tests'>
+  <TabItem value="tests" label="Run tests">
 
 - Execute end-to-end tests against at least one peer node.
 - Confirm Mycelium log output reports a healthy connection.
 
   </TabItem>
-  <TabItem value='security' label='Secure keys'>
+  <TabItem value="security" label="Secure keys">
 
 - Store generated keys in a secure secrets manager.
 - Rotate credentials on a regular cadence.
 
   </TabItem>
-  <TabItem value='integration' label='Wire the UI'>
+  <TabItem value="integration" label="Wire the UI">
 
 - Ensure your frontend calls the UI contract methods consistently.
 - Document the API surface for downstream teams.
