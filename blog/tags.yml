@@ -1,19 +1,27 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
+announcement:
+  label: Announcements
+  permalink: /blog/tags/announcement
 
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
+release:
+  label: Releases
+  permalink: /blog/tags/release
 
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
+platform:
+  label: Platform
+  permalink: /blog/tags/platform
 
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+ux:
+  label: UX
+  permalink: /blog/tags/ux
+
+design:
+  label: Design
+  permalink: /blog/tags/design
+
+tooling:
+  label: Tooling
+  permalink: /blog/tags/tooling
+
+preview:
+  label: Preview
+  permalink: /blog/tags/preview

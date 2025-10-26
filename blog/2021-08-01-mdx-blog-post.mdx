@@ -1,24 +1,47 @@
 ---
-slug: mdx-blog-post
-title: MDX Blog Post
-authors: [slorber]
-tags: [docusaurus]
+slug: agrinet-cli-preview
+title: Preview the Agrinet CLI with Interactive Sandboxes
+authors: [devrel]
+tags: [tooling, preview]
 ---
 
-Blog posts support [Docusaurus Markdown features](https://docusaurus.io/docs/markdown-features), such as [MDX](https://mdxjs.com/).
+Blog posts support [Agrinet Markdown features](https://agrinet.io/docs/markdown-features), such as [Docusaurus](https://docusaurus.io/).
 
 :::tip
 
-Use the power of React to create interactive blog posts.
+Use the power of Agrinet to create interactive blog posts.
 
 :::
 
 {/* truncate */}
 
-For example, use JSX to create an interactive button:
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-```js
-<button onClick={() => alert('button clicked!')}>Click me!</button>
+Ready to kick the tires on the Agrinet CLI without leaving your browser? We packaged the toolkit into
+an interactive playground similar to the React Native Snack environment.
+
+<Tabs groupId="platform">
+  <TabItem value="mac" label="macOS">
+
+```bash
+npx agrinet-cli@latest init farming-sim --template react-native
+cd farming-sim
+npm run agrinet:start
 ```
 
-<button onClick={() => alert('button clicked!')}>Click me!</button>
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+
+```bash
+npx agrinet-cli@latest init farming-sim --template react-native
+cd farming-sim
+./gradlew agrinet:deploySim
+```
+
+  </TabItem>
+</Tabs>
+
+We're shipping more recipes soon, including deep links into GraphQL Studio and remote sensor
+telemetry emulation. Drop your wishlist in the [Agrinet Discussions](https://github.com/agrinet)
+and subscribe for updates.
