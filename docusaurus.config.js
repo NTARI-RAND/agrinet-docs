@@ -4,15 +4,15 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from "prism-react-renderer";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Agrinet Docs',
-  tagline: 'Fruitful App & Agrinet Engine',
-  favicon: 'img/favicon.ico',
+  title: "Agrinet Docs",
+  tagline: "Fruitful App & Agrinet Engine",
+  favicon: "img/favicon.ico",
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -20,56 +20,54 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: "https://your-docusaurus-site.example.com",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: "/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'NTARI-RAND/NetworkTheoryAppliedResearchInstitute', // Usually your GitHub org/user name.
-  projectName: 'Agrinet', // Usually your repo name.
+  organizationName: "NTARI-RAND/NetworkTheoryAppliedResearchInstitute", // Usually your GitHub org/user name.
+  projectName: "Agrinet", // Usually your repo name.
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "warn",
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: "en",
+    locales: ["en"],
   },
 
   presets: [
     [
-      'classic',
+      "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: './sidebars.js',
+          sidebarPath: "./sidebars.js",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/NTARI-RAND/Agrinet',
+          editUrl: "https://github.com/NTARI-RAND/agrinet-docs",
         },
         blog: {
           showReadingTime: true,
           feedOptions: {
-            type: ['rss', 'atom'],
+            type: ["rss", "atom"],
             xslt: true,
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/NTARI-RAND/Agrinet',
+          editUrl: "https://github.com/NTARI-RAND/agrinet-docs",
           // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
+          onInlineTags: "warn",
+          onInlineAuthors: "warn",
+          onUntruncatedBlogPosts: "warn",
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: "./src/css/custom.css",
         },
       }),
     ],
@@ -79,110 +77,110 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: "img/docusaurus-social-card.jpg",
       colorMode: {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'Agrinet Docs',
+        title: "Agrinet Docs",
         logo: {
-          alt: 'Agrinet Logo',
-          src: 'img/logo.svg',
+          alt: "Agrinet Logo",
+          src: "img/logo.svg",
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Tutorial',
+            type: "docSidebar",
+            sidebarId: "tutorialSidebar",
+            position: "left",
+            label: "Tutorial",
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          { to: "/blog", label: "Blog", position: "left" },
           {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
+            href: "https://github.com/NTARI-RAND/agrinet-docs",
+            label: "GitHub",
+            position: "right",
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
         links: [
           {
-            title: 'Docs',
+            title: "Docs",
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: "Tutorial",
+                to: "/docs/intro",
               },
               {
-                label: 'Onbaording',
-                to: '/docs/onboarding',
+                label: "Onbaording",
+                to: "/docs/onboarding",
               },
               {
-                label: 'Federation Guide',
-                to: '/docs/federation-guide',
+                label: "Federation Guide",
+                to: "/docs/federation-guide",
               },
               {
-                label: 'API Testing',
-                to: '/docs/api-testing',
-              }
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Slack',
-                href: 'https://ntari.slack.com',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/ntariorg',
-              },
-              {
-                label: 'Instagram',
-                href: 'https://www.instagram.com/ntaricommunity/',
-              },
-              {
-                label: 'TikTok',
-                href: 'https://www.tiktok.com/@networktheory',
-              },
-              {
-                label: 'Facebook',
-                href: 'https://www.facebook.com/networktheory',
-              },
-              {
-                label: 'Reddit',
-                href: 'https://www.reddit.com/r/NTARIorg/',
-              },
-              {
-                label: 'LinkedIn',
-                href: 'https://www.linkedin.com/company/ntari/',
+                label: "API Testing",
+                to: "/docs/api-testing",
               },
             ],
           },
           {
-            title: 'More',
+            title: "Community",
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
+                label: "Stack Overflow",
+                href: "https://stackoverflow.com/questions/tagged/docusaurus",
               },
               {
-                laebl: 'Privacy',       // create /src/pages/privacy.mdx if you keep this
-                to: '/privacy'
+                label: "Slack",
+                href: "https://ntari.slack.com",
               },
               {
-                label: 'Terms',         // create /src/pages/terms.mdx if you keep this
-                to: '/terms'
+                label: "X",
+                href: "https://x.com/ntariorg",
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/NTARI-RAND/Agrinet',
+                label: "Instagram",
+                href: "https://www.instagram.com/ntaricommunity/",
+              },
+              {
+                label: "TikTok",
+                href: "https://www.tiktok.com/@networktheory",
+              },
+              {
+                label: "Facebook",
+                href: "https://www.facebook.com/networktheory",
+              },
+              {
+                label: "Reddit",
+                href: "https://www.reddit.com/r/NTARIorg/",
+              },
+              {
+                label: "LinkedIn",
+                href: "https://www.linkedin.com/company/ntari/",
+              },
+            ],
+          },
+          {
+            title: "More",
+            items: [
+              {
+                label: "Blog",
+                to: "/blog",
+              },
+              {
+                laebl: "Privacy", // create /src/pages/privacy.mdx if you keep this
+                to: "/privacy",
+              },
+              {
+                label: "Terms", // create /src/pages/terms.mdx if you keep this
+                to: "/terms",
+              },
+              {
+                label: "GitHub",
+                href: "https://github.com/NTARI-RAND/Agrinet",
               },
             ],
           },
