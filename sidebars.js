@@ -20,8 +20,7 @@ const sidebars = {
 
   // But you can create a sidebar manually
   // sidebars.js
-  /*
-  tutorialSidebar: [
+  tutorial: [
     "intro",
     "onboarding",
     "federation-guide",
@@ -32,7 +31,6 @@ const sidebars = {
       items: ["tutorial-basics/create-a-document"],
     },
   ],
-  */
 };
 
 export default sidebars;
