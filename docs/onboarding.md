@@ -112,22 +112,22 @@ module.exports = {
 
 <Tabs>
   <TabItem value="tests" label="Run tests">
-
-- Execute end-to-end tests against at least one peer node.
-- Confirm Mycelium log output reports a healthy connection.
-
+    <ul>
+      <li>Execute end-to-end tests against at least one peer node.</li>
+      <li>Confirm Mycelium log output reports a healthy connection.</li>
+    </ul>
   </TabItem>
   <TabItem value="security" label="Secure keys">
-
-- Store generated keys in a secure secrets manager.
-- Rotate credentials on a regular cadence.
-
+    <ul>
+      <li>Store generated keys in a secure secrets manager.</li>
+      <li>Rotate credentials on a regular cadence.</li>
+    </ul>
   </TabItem>
   <TabItem value="integration" label="Wire the UI">
-
-- Ensure your frontend calls the UI contract methods consistently.
-- Document the API surface for downstream teams.
-
+    <ul>
+      <li>Ensure your frontend calls the UI contract methods consistently.</li>
+      <li>Document the API surface for downstream teams.</li>
+    </ul>
   </TabItem>
 </Tabs>
 
