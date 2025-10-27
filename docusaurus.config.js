@@ -94,7 +94,7 @@ const config = {
           },
           { to: "/blog", label: "Blog", position: "left" },
           {
-            href: "https://github.com/NTARI-RAND/agrinet-docs",
+            href: "https://github.com/NTARI-RAND/Agrinet",
             label: "GitHub",
             position: "right",
           },
@@ -149,7 +149,7 @@ const config = {
               { label: "Terms", to: "/terms" },
               {
                 label: "GitHub",
-                href: "https://github.com/NTARI-RAND/Agrinet",
+                href: "https://github.com/NTARI-RAND",
               },
             ],
           },
