@@ -19,8 +19,6 @@ If you are new to Docusaurus, the official [installation guide](https://docusaur
 
 Agrinet connects growers, service partners, and data providers in a unified ecosystem. Use the navigation to learn how to onboard new organizations, integrate services, and validate APIs. Get started by **creating a new node**.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
-
 <Tabs>
   <TabItem value="start" label="Get set up">
 
