@@ -4,6 +4,9 @@ title: Welcome to Agrinet
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Tutorial Intro
 
 Welcome to the interactive documentation hub for Agrinet! This site is built with [Docusaurus](https://docusaurus.io/) so that your teams can explore, search, and contribute to Agrinet knowledge in a delightful way.
