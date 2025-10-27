@@ -1,5 +1,4 @@
 ---
-slug: /
 title: Welcome to Agrinet
 sidebar_position: 1
 ---
