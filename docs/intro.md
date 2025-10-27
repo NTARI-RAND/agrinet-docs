@@ -25,24 +25,6 @@ Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new
 
 ## Generate a new node
 
-<Tabs>
-  <TabItem value="start" label="Get set up">
-
-Review the [Onboarding guide](onboarding) to learn how to provision environments, invite team members, and configure federated identity.
-
-  </TabItem>
-  <TabItem value="integrate" label="Integrate services">
-
-Follow the [Federation guide](federation-guide) for details on linking external providers and managing schema updates.
-
-  </TabItem>
-  <TabItem value="test" label="Validate APIs">
-
-Use the [API testing playbook](api-testing) to verify that every service contract behaves as expected before launch.
-
-  </TabItem>
-</Tabs>
-
 The classic template will automatically be added to your project after you run the command:
 
 ```bash
