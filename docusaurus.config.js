@@ -10,7 +10,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import("@docusaurus/types").Config} */
 const config = {
-  title: "Agrinet Docs",
+  title: "Agrinet Protocol",
   tagline: "Fruitful App & Agrinet Engine",
   favicon: "img/favicon.ico",
 
