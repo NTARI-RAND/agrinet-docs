@@ -83,7 +83,7 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: "Agrinet Docs",
+        title: "v1.0",
         logo: { alt: "Agrinet Logo", src: "img/logo.svg" },
         items: [
           {
