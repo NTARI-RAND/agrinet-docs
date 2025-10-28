@@ -39,3 +39,24 @@ GIT_USER=<Your GitHub username> yarn deploy
 ```
 
 If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+
+## Live registry server
+
+The global map now polls a lightweight registry service that keeps track of node
+locations and their latest heartbeat. You can run a local instance of the
+registry alongside the Docusaurus dev server:
+
+```bash
+# start the registry (defaults to http://0.0.0.0:4000)
+yarn registry
+
+# in another terminal start the docs (which proxy to the same origin by default)
+yarn start
+```
+
+Set the `AGRINET_REGISTRY_URL` environment variable at build/runtime if the API
+lives on a different domain than the docs (for example,
+`AGRINET_REGISTRY_URL=https://registry.example.org`). Nodes can register
+themselves with `POST /api/nodes`, send heartbeat updates via
+`PUT /api/nodes/:id/ping`, and map clients consume the `GET /api/nodes`
+endpoint.
