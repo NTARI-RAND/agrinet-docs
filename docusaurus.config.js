@@ -14,6 +14,18 @@ const config = {
   tagline: "Fruitful App & Agrinet Engine",
   favicon: "img/favicon.ico",
 
+  // Add the Leaflet CSS via CDN so pages that render maps (react-leaflet + leaflet)
+  // get the stylesheet without importing 'leaflet/dist/leaflet.css' from JS.
+  // If you already have a `stylesheets` array, merge this object into it instead
+  // of duplicating the key.
+  stylesheets: [
+    {
+      href: "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+      crossorigin: "anonymous",
+      // integrity: "sha384-..." // optional: add SRI integrity if desired
+    },
+  ],
+
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
