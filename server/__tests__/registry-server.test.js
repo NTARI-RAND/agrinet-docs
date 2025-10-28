@@ -131,6 +131,16 @@ async function putJson(url, body, token) {
   return response;
 }
 
+async function getJson(url) {
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
+  const json = await response.json();
+  return { response, json };
+}
+
 const WRITE_TOKEN = "test-write-token";
 
 test("registry server safeguards", async (t) => {
@@ -237,6 +247,134 @@ test("registry server safeguards", async (t) => {
       assert.ok(thirdPing.headers.get("retry-after"));
       const errorBody = await thirdPing.json();
       assert.match(errorBody.error, /Too many write requests/);
+    } finally {
+      await context.cleanup();
+    }
+  });
+
+  await t.test("rejects invalid geometry during registration", async () => {
+    const context = await startRegistryProcess({ port: allocatePort() });
+
+    try {
+      const response = await postJson(
+        `${context.baseUrl}/api/nodes`,
+        {
+          type: "Feature",
+          properties: {
+            node_name: "Bad geometry",
+            contact_email: "ops@example.org",
+            node_type: "Service",
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              [0, 0],
+              [1, 1],
+            ],
+          },
+        },
+        WRITE_TOKEN
+      );
+
+      assert.strictEqual(response.status, 400);
+      const payload = await response.json();
+      assert.match(payload.error, /Only Point geometries are supported/i);
+    } finally {
+      await context.cleanup();
+    }
+  });
+
+  await t.test("serves registered nodes and updates heartbeat", async () => {
+    const context = await startRegistryProcess({ port: allocatePort() });
+
+    try {
+      const createResponse = await postJson(
+        `${context.baseUrl}/api/nodes`,
+        {
+          type: "Feature",
+          properties: {
+            node_name: "Heartbeat Node",
+            contact_email: "ops@example.org",
+            node_type: "Service",
+            languages: ["English"],
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [10, 10],
+          },
+        },
+        WRITE_TOKEN
+      );
+      assert.strictEqual(createResponse.status, 201);
+      const createdBody = await createResponse.json();
+      const nodeId = createdBody.properties.id;
+
+      const { response: getResponse, json: getJsonBody } = await getJson(
+        `${context.baseUrl}/api/nodes/${nodeId}`
+      );
+      assert.strictEqual(getResponse.status, 200);
+      assert.strictEqual(getJsonBody.properties.node_name, "Heartbeat Node");
+
+      const heartbeatResponse = await putJson(
+        `${context.baseUrl}/api/nodes/${nodeId}/ping`,
+        { last_seen: "2025-01-01T00:00:00Z" },
+        WRITE_TOKEN
+      );
+      assert.strictEqual(heartbeatResponse.status, 200);
+      const heartbeatBody = await heartbeatResponse.json();
+      assert.strictEqual(
+        heartbeatBody.properties.last_seen,
+        "2025-01-01T00:00:00.000Z"
+      );
+
+      const { json: afterPing } = await getJson(
+        `${context.baseUrl}/api/nodes/${nodeId}`
+      );
+      assert.strictEqual(
+        afterPing.properties.last_seen,
+        "2025-01-01T00:00:00.000Z"
+      );
+    } finally {
+      await context.cleanup();
+    }
+  });
+
+  await t.test("rejects forbidden property updates during heartbeat", async () => {
+    const context = await startRegistryProcess({ port: allocatePort() });
+
+    try {
+      const createResponse = await postJson(
+        `${context.baseUrl}/api/nodes`,
+        {
+          type: "Feature",
+          properties: {
+            node_name: "Immutable Node",
+            contact_email: "ops@example.org",
+            node_type: "Service",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [10, 10],
+          },
+        },
+        WRITE_TOKEN
+      );
+      assert.strictEqual(createResponse.status, 201);
+
+      const forbiddenResponse = await putJson(
+        `${context.baseUrl}/api/nodes/immutable-node/ping`,
+        {
+          last_seen: new Date().toISOString(),
+          properties: {
+            id: "new-id",
+          },
+        },
+        WRITE_TOKEN
+      );
+
+      assert.strictEqual(forbiddenResponse.status, 400);
+      const body = await forbiddenResponse.json();
+      assert.match(body.error, /may not be modified/i);
     } finally {
       await context.cleanup();
     }

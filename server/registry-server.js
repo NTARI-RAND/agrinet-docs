@@ -79,6 +79,29 @@ let writeLock = Promise.resolve();
 
 const writeRateLimiters = new Map();
 
+function logEvent(level, message, context = undefined) {
+  const base = {
+    timestamp: new Date().toISOString(),
+    level,
+    message,
+  };
+  const payload =
+    context && typeof context === "object" ? { ...base, ...context } : base;
+
+  const serialized = JSON.stringify(payload);
+  if (level === "error") {
+    console.error(serialized);
+  } else if (level === "warn") {
+    console.warn(serialized);
+  } else {
+    console.log(serialized);
+  }
+}
+
+const logInfo = (message, context) => logEvent("info", message, context);
+const logWarn = (message, context) => logEvent("warn", message, context);
+const logError = (message, context) => logEvent("error", message, context);
+
 function isOriginAllowed(origin, allowList) {
   if (!origin) {
     return true;
@@ -132,6 +155,11 @@ function resolveWriteToken(req) {
 
 function ensureWriteAuthorized(req, res) {
   if (!hasWriteTokenConfigured) {
+    logWarn("Write attempt rejected: token not configured", {
+      remoteAddress: req.socket && req.socket.remoteAddress,
+      method: req.method,
+      url: req.url,
+    });
     sendJson(
       req,
       res,
@@ -152,6 +180,11 @@ function ensureWriteAuthorized(req, res) {
     return true;
   }
 
+  logWarn("Write attempt rejected: unauthorized", {
+    remoteAddress: req.socket && req.socket.remoteAddress,
+    method: req.method,
+    url: req.url,
+  });
   sendJson(
     req,
     res,
@@ -221,6 +254,12 @@ function enforceWriteRateLimit(req, res) {
       1,
       Math.ceil((entry.resetTime - now) / 1000)
     );
+    logWarn("Write rate limit triggered", {
+      key,
+      maxWrites: RATE_LIMIT_MAX_WRITES,
+      windowMs,
+      remoteAddress: req.socket && req.socket.remoteAddress,
+    });
     sendJson(
       req,
       res,
@@ -621,7 +660,10 @@ async function loadInitialNodes() {
             const normalized = parseIncomingFeature(feature, index);
             upsertNode(normalized);
           } catch (error) {
-            console.warn(`Skipping feature while loading ${file}:`, error.message);
+            logWarn("Skipping feature while loading seed data", {
+              file,
+              error: error.message,
+            });
           }
         });
         return;
@@ -828,6 +870,10 @@ async function handleRequest(req, res) {
         return;
       }
       sendJson(req, res, 204, {}, {}, WRITE_ORIGINS);
+      logInfo("Deleted node", {
+        nodeId: id,
+        remoteAddress: req.socket && req.socket.remoteAddress,
+      });
       broadcastUpdate();
       return;
     }
@@ -930,7 +976,10 @@ async function handleRequest(req, res) {
           return { found: true, feature: updated };
         });
       } catch (error) {
-        console.error("Failed to persist heartbeat", error);
+        logError("Failed to persist heartbeat", {
+          nodeId: id,
+          error: error.message,
+        });
         sendJson(req, res, 500, { error: "Internal server error" }, {}, WRITE_ORIGINS);
         return;
       }
@@ -948,6 +997,10 @@ async function handleRequest(req, res) {
         {},
         WRITE_ORIGINS
       );
+      logInfo("Recorded heartbeat", {
+        nodeId: id,
+        remoteAddress: req.socket && req.socket.remoteAddress,
+      });
       broadcastUpdate();
       return;
     }
@@ -1017,12 +1070,22 @@ async function handleRequest(req, res) {
         },
         WRITE_ORIGINS
       );
+      logInfo("Registered node", {
+        nodeId: result.feature.properties.id,
+        remoteAddress: req.socket && req.socket.remoteAddress,
+      });
       broadcastUpdate();
       return;
     } catch (error) {
       const status = error && error.statusCode ? error.statusCode : 500;
       if (status === 500) {
-        console.error("Failed to register node", error);
+        logError("Failed to register node", { error: error.message });
+      } else {
+        logWarn("Registration rejected", {
+          status,
+          error: error && error.message,
+          remoteAddress: req.socket && req.socket.remoteAddress,
+        });
       }
       sendJson(
         req,
@@ -1044,7 +1107,7 @@ async function start() {
 
   const server = http.createServer((req, res) => {
     handleRequest(req, res).catch((error) => {
-      console.error("Unhandled error:", error);
+      logError("Unhandled error", { error: error.message, stack: error.stack });
       try {
         sendJson(req, res, 500, { error: "Internal server error" });
       } catch (sendError) {
@@ -1054,16 +1117,19 @@ async function start() {
   });
 
   server.listen(PORT, HOST, () => {
-    console.log(`Agrinet registry server listening on http://${HOST}:${PORT}`);
+    logInfo("Agrinet registry server listening", { host: HOST, port: PORT });
   });
 
   server.on("clientError", (err, socket) => {
-    console.warn("Client error", err.message);
+    logWarn("Client error", { error: err.message });
     socket.end("HTTP/1.1 400 Bad Request\r\n\r\n");
   });
 }
 
 start().catch((error) => {
-  console.error("Failed to start registry server:", error);
+  logError("Failed to start registry server", {
+    error: error.message,
+    stack: error.stack,
+  });
   process.exitCode = 1;
 });

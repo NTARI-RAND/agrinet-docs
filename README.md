@@ -107,6 +107,23 @@ default. Tune this by setting `REGISTRY_RATE_LIMIT_MAX_WRITES` and
 `REGISTRY_RATE_LIMIT_WINDOW_MS` (milliseconds) when launching the registry. Set
 `REGISTRY_RATE_LIMIT_MAX_WRITES=0` to disable rate limiting entirely.
 
+### Logging & monitoring
+
+The registry emits structured JSON logs for key lifecycle events (registrations,
+heartbeats, deletions, and rate-limit violations). Each log line includes a
+timestamp, log level, message, and contextual metadata so you can forward the
+output directly to your log aggregation pipeline.
+
+### Continuous integration
+
+GitHub Actions runs the registry smoke tests on every pull request and on
+pushes that touch the registry, map page, or related configuration. Run the same
+checks locally with:
+
+```bash
+yarn test
+```
+
 ### Tests
 
 Run the registry smoke tests with:
