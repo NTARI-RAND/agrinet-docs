@@ -54,9 +54,10 @@ yarn registry
 yarn start
 ```
 
-Set the `AGRINET_REGISTRY_URL` environment variable at build/runtime if the API
-lives on a different domain than the docs (for example,
-`AGRINET_REGISTRY_URL=https://registry.example.org`).
+Set the `AGRINET_REGISTRY_URL` environment variable before running `yarn start`
+or `yarn build` if the API lives on a different domain than the docs (for
+example, `AGRINET_REGISTRY_URL=https://registry.example.org`). Docusaurus
+embeds this value at build time, so redeploy the site after changing it.
 
 ### Authentication & CORS
 
@@ -98,3 +99,18 @@ Nodes can register themselves with `POST /api/nodes`, send heartbeat updates via
 endpoint. The server persists data to `server/nodes.json` using atomic file
 writes and also seeds from `static/data/global_map_layer.geojson` if no
 database has been created yet.
+
+### Rate limiting
+
+Write operations are throttled to 120 requests per minute (per token/IP) by
+default. Tune this by setting `REGISTRY_RATE_LIMIT_MAX_WRITES` and
+`REGISTRY_RATE_LIMIT_WINDOW_MS` (milliseconds) when launching the registry. Set
+`REGISTRY_RATE_LIMIT_MAX_WRITES=0` to disable rate limiting entirely.
+
+### Tests
+
+Run the registry smoke tests with:
+
+```bash
+yarn test
+```

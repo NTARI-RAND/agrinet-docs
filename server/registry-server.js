@@ -8,17 +8,43 @@ const path = require("path");
 const fs = require("fs");
 const fsPromises = require("fs/promises");
 
+function parseIntegerEnv(value, fallback) {
+  if (value === undefined) {
+    return fallback;
+  }
+
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) {
+    return fallback;
+  }
+
+  return parsed;
+}
+
 const PORT = parseInt(process.env.PORT || "4000", 10);
 const HOST = process.env.HOST || "0.0.0.0";
-const DATA_FILE = path.join(__dirname, "nodes.json");
-const STATIC_SEED_FILE = path.join(
-  __dirname,
-  "..",
-  "static",
-  "data",
-  "global_map_layer.geojson"
-);
+const DATA_FILE = process.env.REGISTRY_DATA_FILE
+  ? path.resolve(process.env.REGISTRY_DATA_FILE)
+  : path.join(__dirname, "nodes.json");
+const STATIC_SEED_FILE = process.env.REGISTRY_STATIC_SEED_FILE
+  ? path.resolve(process.env.REGISTRY_STATIC_SEED_FILE)
+  : path.join(
+      __dirname,
+      "..",
+      "static",
+      "data",
+      "global_map_layer.geojson"
+    );
 const ONLINE_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes
+const RATE_LIMIT_WINDOW_MS = Math.max(
+  parseIntegerEnv(process.env.REGISTRY_RATE_LIMIT_WINDOW_MS, 60_000),
+  1000
+);
+const RATE_LIMIT_MAX_WRITES = Math.max(
+  parseIntegerEnv(process.env.REGISTRY_RATE_LIMIT_MAX_WRITES, 120),
+  0
+);
+const MAX_RATE_LIMIT_CACHE = 10_000;
 const WRITE_TOKEN = process.env.REGISTRY_WRITE_TOKEN || "";
 const READ_ORIGINS = (process.env.REGISTRY_READ_ORIGINS || "*")
   .split(",")
@@ -35,6 +61,13 @@ let nodes = new Map();
 const sseClients = new Set();
 const sseKeepAliveTimers = new Map();
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+const ID_PATTERN = /^[a-zA-Z0-9._-]+$/;
+const MAX_STRING_LENGTH = 240;
+const MAX_EMAIL_LENGTH = 254;
+const MAX_URL_LENGTH = 2048;
+const MAX_ARRAY_ITEMS = 32;
+
 const jsonHeaders = {
   "Content-Type": "application/json; charset=utf-8",
 };
@@ -43,6 +76,8 @@ const allowedMethods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
 const KEEPALIVE_INTERVAL_MS = 30_000;
 
 let writeLock = Promise.resolve();
+
+const writeRateLimiters = new Map();
 
 function isOriginAllowed(origin, allowList) {
   if (!origin) {
@@ -113,6 +148,7 @@ function ensureWriteAuthorized(req, res) {
 
   const incomingToken = resolveWriteToken(req);
   if (incomingToken && incomingToken === WRITE_TOKEN) {
+    req.authorizedWriteToken = incomingToken;
     return true;
   }
 
@@ -125,6 +161,255 @@ function ensureWriteAuthorized(req, res) {
     WRITE_ORIGINS
   );
   return false;
+}
+
+function getWriteLimiterKey(req) {
+  if (req.authorizedWriteToken) {
+    return `token:${req.authorizedWriteToken}`;
+  }
+
+  const fallback = resolveWriteToken(req);
+  if (fallback) {
+    return `token:${fallback}`;
+  }
+
+  const remoteAddress = req.socket && req.socket.remoteAddress;
+  return `ip:${remoteAddress || "unknown"}`;
+}
+
+function pruneRateLimiters(now) {
+  if (writeRateLimiters.size <= MAX_RATE_LIMIT_CACHE) {
+    return;
+  }
+
+  for (const [key, entry] of writeRateLimiters) {
+    if (now >= entry.resetTime) {
+      writeRateLimiters.delete(key);
+    }
+  }
+}
+
+function enforceWriteRateLimit(req, res) {
+  if (RATE_LIMIT_MAX_WRITES <= 0) {
+    return true;
+  }
+
+  const now = Date.now();
+  pruneRateLimiters(now);
+
+  const key = getWriteLimiterKey(req);
+  const windowMs = RATE_LIMIT_WINDOW_MS;
+  const existing = writeRateLimiters.get(key);
+
+  let entry;
+  if (!existing || now >= existing.resetTime) {
+    entry = {
+      count: 1,
+      resetTime: now + windowMs,
+    };
+  } else {
+    entry = {
+      count: existing.count + 1,
+      resetTime: existing.resetTime,
+    };
+  }
+
+  writeRateLimiters.set(key, entry);
+
+  if (entry.count > RATE_LIMIT_MAX_WRITES) {
+    const retryAfterSeconds = Math.max(
+      1,
+      Math.ceil((entry.resetTime - now) / 1000)
+    );
+    sendJson(
+      req,
+      res,
+      429,
+      { error: "Too many write requests, please slow down." },
+      { "Retry-After": String(retryAfterSeconds) },
+      WRITE_ORIGINS
+    );
+    return false;
+  }
+
+  return true;
+}
+
+function normalizeHttpUrl(value) {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.length > MAX_URL_LENGTH) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+      return parsed.toString();
+    }
+  } catch (error) {
+    return null;
+  }
+
+  return null;
+}
+
+function validateProperties(
+  properties,
+  { requireNodeName = false, allowIdUpdates = true, partial = false } = {}
+) {
+  if (!properties || typeof properties !== "object") {
+    if (requireNodeName) {
+      throw new Error("properties must be an object");
+    }
+    return {};
+  }
+
+  const normalized = {};
+
+  if (Object.prototype.hasOwnProperty.call(properties, "id")) {
+    if (!allowIdUpdates) {
+      throw new Error("id may not be modified via this endpoint");
+    }
+    const candidate = String(properties.id || "").trim();
+    if (!candidate || candidate.length > MAX_STRING_LENGTH || !ID_PATTERN.test(candidate)) {
+      throw new Error("Invalid id");
+    }
+    normalized.id = candidate;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(properties, "node_name")) {
+    const candidate = String(properties.node_name || "").trim();
+    if (!candidate) {
+      throw new Error("node_name must be a non-empty string");
+    }
+    if (candidate.length > MAX_STRING_LENGTH) {
+      throw new Error("node_name is too long");
+    }
+    normalized.node_name = candidate;
+  } else if (requireNodeName) {
+    throw new Error("node_name is required");
+  }
+
+  if (Object.prototype.hasOwnProperty.call(properties, "node_type")) {
+    const candidate = String(properties.node_type || "").trim();
+    if (!candidate) {
+      throw new Error("node_type must be a non-empty string");
+    }
+    if (candidate.length > MAX_STRING_LENGTH) {
+      throw new Error("node_type is too long");
+    }
+    normalized.node_type = candidate;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(properties, "contact_email")) {
+    const candidate = String(properties.contact_email || "").trim();
+    if (!candidate) {
+      throw new Error("contact_email must be a valid email address");
+    }
+    if (candidate.length > MAX_EMAIL_LENGTH || !EMAIL_REGEX.test(candidate)) {
+      throw new Error("contact_email must be a valid email address");
+    }
+    normalized.contact_email = candidate;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(properties, "fork_repo")) {
+    const candidate = String(properties.fork_repo || "").trim();
+    if (!candidate) {
+      throw new Error("fork_repo must be an http(s) URL");
+    }
+    const safeUrl = normalizeHttpUrl(candidate);
+    if (!safeUrl) {
+      throw new Error("fork_repo must be an http(s) URL");
+    }
+    normalized.fork_repo = safeUrl;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(properties, "languages")) {
+    const incoming = properties.languages;
+    if (!Array.isArray(incoming)) {
+      throw new Error("languages must be an array of strings");
+    }
+    const values = Array.from(
+      new Set(
+        incoming
+          .map((item) => (typeof item === "string" ? item.trim() : ""))
+          .filter((item) => item)
+      )
+    );
+    if (values.length > MAX_ARRAY_ITEMS) {
+      throw new Error("languages has too many entries");
+    }
+    if (values.some((item) => item.length > MAX_STRING_LENGTH)) {
+      throw new Error("languages entries are too long");
+    }
+    normalized.languages = values;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(properties, "ping_categories")) {
+    const incoming = properties.ping_categories;
+    if (!Array.isArray(incoming)) {
+      throw new Error("ping_categories must be an array of strings");
+    }
+    const values = Array.from(
+      new Set(
+        incoming
+          .map((item) => (typeof item === "string" ? item.trim() : ""))
+          .filter((item) => item)
+      )
+    );
+    if (values.length > MAX_ARRAY_ITEMS) {
+      throw new Error("ping_categories has too many entries");
+    }
+    if (values.some((item) => item.length > MAX_STRING_LENGTH)) {
+      throw new Error("ping_categories entries are too long");
+    }
+    normalized.ping_categories = values;
+  }
+
+  for (const [key, value] of Object.entries(properties)) {
+    if (
+      [
+        "id",
+        "node_name",
+        "node_type",
+        "contact_email",
+        "fork_repo",
+        "languages",
+        "ping_categories",
+      ].includes(key)
+    ) {
+      continue;
+    }
+
+    if (value == null) {
+      continue;
+    }
+
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      if (!trimmed && !partial) {
+        continue;
+      }
+      if (trimmed.length > MAX_STRING_LENGTH) {
+        throw new Error(`${key} is too long`);
+      }
+      normalized[key] = trimmed;
+      continue;
+    }
+
+    if (typeof value === "number" || typeof value === "boolean") {
+      normalized[key] = value;
+      continue;
+    }
+
+    throw new Error(`Unsupported property type for ${key}`);
+  }
+
+  return normalized;
 }
 
 function slugify(value) {
@@ -217,15 +502,29 @@ function parseIncomingFeature(body, index = 0) {
     };
   }
 
-  const lastSeen = feature.properties.last_seen
-    ? new Date(feature.properties.last_seen)
-    : new Date();
+  const sanitizedProperties = validateProperties(feature.properties, {
+    requireNodeName: true,
+    allowIdUpdates: true,
+    partial: false,
+  });
+
+  const lastSeenRaw = Object.prototype.hasOwnProperty.call(
+    feature.properties,
+    "last_seen"
+  )
+    ? feature.properties.last_seen
+    : undefined;
+
+  const lastSeen = lastSeenRaw ? new Date(lastSeenRaw) : new Date();
 
   if (Number.isNaN(lastSeen.getTime())) {
     throw new Error("Invalid last_seen timestamp");
   }
 
-  feature.properties.last_seen = lastSeen.toISOString();
+  feature.properties = {
+    ...sanitizedProperties,
+    last_seen: lastSeen.toISOString(),
+  };
 
   const normalized = ensureFeatureHasId(feature, index);
   return normalized;
@@ -376,7 +675,7 @@ function handleOptions(req, res, allowedOrigins) {
   const originHeader = resolveAllowedOrigin(req.headers.origin, allowedOrigins);
   const headers = {
     "Access-Control-Allow-Methods": allowedMethods.join(", "),
-    "Access-Control-Allow-Headers": "content-type, authorization",
+    "Access-Control-Allow-Headers": "content-type, authorization, x-api-key",
     "Access-Control-Max-Age": "600",
   };
 
@@ -512,6 +811,9 @@ async function handleRequest(req, res) {
       if (!ensureWriteAuthorized(req, res)) {
         return;
       }
+      if (!enforceWriteRateLimit(req, res)) {
+        return;
+      }
       const id = decodeURIComponent(parts[0]);
       const deleted = await withWriteLock(async () => {
         if (!nodes.has(id)) {
@@ -534,12 +836,34 @@ async function handleRequest(req, res) {
       if (!ensureWriteAuthorized(req, res)) {
         return;
       }
+      if (!enforceWriteRateLimit(req, res)) {
+        return;
+      }
       const id = decodeURIComponent(parts[0]);
       let body = {};
       try {
         body = (await getRequestBody(req)) || {};
       } catch (error) {
         sendJson(req, res, 400, { error: error.message }, {}, WRITE_ORIGINS);
+        return;
+      }
+
+      const hasPropertiesField = Object.prototype.hasOwnProperty.call(
+        body,
+        "properties"
+      );
+      if (
+        hasPropertiesField &&
+        (body.properties === null || typeof body.properties !== "object")
+      ) {
+        sendJson(
+          req,
+          res,
+          400,
+          { error: "properties must be an object" },
+          {},
+          WRITE_ORIGINS
+        );
         return;
       }
 
@@ -559,6 +883,27 @@ async function handleRequest(req, res) {
         }
       }
 
+      let sanitizedPropertyUpdates = {};
+      if (hasPropertiesField) {
+        try {
+          sanitizedPropertyUpdates = validateProperties(body.properties, {
+            requireNodeName: false,
+            allowIdUpdates: false,
+            partial: true,
+          });
+        } catch (error) {
+          sendJson(
+            req,
+            res,
+            400,
+            { error: error.message },
+            {},
+            WRITE_ORIGINS
+          );
+          return;
+        }
+      }
+
       let updateResult;
       try {
         updateResult = await withWriteLock(async () => {
@@ -571,7 +916,7 @@ async function handleRequest(req, res) {
             ...existing,
             properties: {
               ...existing.properties,
-              ...body.properties,
+              ...sanitizedPropertyUpdates,
               last_seen: lastSeen.toISOString(),
             },
           };
@@ -610,6 +955,9 @@ async function handleRequest(req, res) {
 
   if (method === "POST" && url.pathname === "/api/nodes") {
     if (!ensureWriteAuthorized(req, res)) {
+      return;
+    }
+    if (!enforceWriteRateLimit(req, res)) {
       return;
     }
     let body;
