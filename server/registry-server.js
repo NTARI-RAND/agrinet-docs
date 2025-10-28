@@ -19,16 +19,113 @@ const STATIC_SEED_FILE = path.join(
   "global_map_layer.geojson"
 );
 const ONLINE_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes
+const WRITE_TOKEN = process.env.REGISTRY_WRITE_TOKEN || "";
+const READ_ORIGINS = (process.env.REGISTRY_READ_ORIGINS || "*")
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean);
+const WRITE_ORIGINS = (process.env.REGISTRY_WRITE_ORIGINS || "")
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean);
+
+const hasWriteTokenConfigured = WRITE_TOKEN.length > 0;
 
 let nodes = new Map();
 const sseClients = new Set();
+const sseKeepAliveTimers = new Map();
 
 const jsonHeaders = {
   "Content-Type": "application/json; charset=utf-8",
-  "Access-Control-Allow-Origin": "*",
 };
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
+const KEEPALIVE_INTERVAL_MS = 30_000;
+
+let writeLock = Promise.resolve();
+
+function isOriginAllowed(origin, allowList) {
+  if (!origin) {
+    return true;
+  }
+
+  if (!allowList || allowList.length === 0) {
+    return false;
+  }
+
+  if (allowList.includes("*")) {
+    return true;
+  }
+
+  return allowList.includes(origin);
+}
+
+function resolveAllowedOrigin(origin, allowList) {
+  return isOriginAllowed(origin, allowList) ? origin || allowList[0] : null;
+}
+
+function withWriteLock(action) {
+  const run = async () => {
+    return action();
+  };
+
+  const next = writeLock.then(run, run);
+  writeLock = next.catch(() => {});
+  return next;
+}
+
+function extractBearerToken(headerValue) {
+  if (!headerValue || typeof headerValue !== "string") {
+    return null;
+  }
+
+  const trimmed = headerValue.trim();
+  if (trimmed.toLowerCase().startsWith("bearer ")) {
+    return trimmed.slice(7).trim();
+  }
+
+  return trimmed;
+}
+
+function resolveWriteToken(req) {
+  const authHeader = extractBearerToken(req.headers.authorization);
+  const apiKeyHeader = typeof req.headers["x-api-key"] === "string"
+    ? req.headers["x-api-key"].trim()
+    : null;
+  return authHeader || apiKeyHeader || null;
+}
+
+function ensureWriteAuthorized(req, res) {
+  if (!hasWriteTokenConfigured) {
+    sendJson(
+      req,
+      res,
+      503,
+      {
+        error:
+          "Write operations are disabled because REGISTRY_WRITE_TOKEN is not configured on the server.",
+      },
+      {},
+      WRITE_ORIGINS
+    );
+    return false;
+  }
+
+  const incomingToken = resolveWriteToken(req);
+  if (incomingToken && incomingToken === WRITE_TOKEN) {
+    return true;
+  }
+
+  sendJson(
+    req,
+    res,
+    401,
+    { error: "Unauthorized" },
+    { "WWW-Authenticate": "Bearer" },
+    WRITE_ORIGINS
+  );
+  return false;
+}
 
 function slugify(value) {
   if (!value || typeof value !== "string") {
@@ -150,17 +247,65 @@ function collectionFromNodes() {
   };
 }
 
+function cleanupSseClient(client) {
+  if (sseClients.has(client)) {
+    sseClients.delete(client);
+  }
+  const timer = sseKeepAliveTimers.get(client);
+  if (timer) {
+    clearInterval(timer);
+    sseKeepAliveTimers.delete(client);
+  }
+  try {
+    client.end();
+  } catch (error) {
+    // noop
+  }
+}
+
+function registerSseClient(res) {
+  sseClients.add(res);
+  if (!sseKeepAliveTimers.has(res)) {
+    const timer = setInterval(() => {
+      try {
+        res.write(": keep-alive\n\n");
+      } catch (error) {
+        cleanupSseClient(res);
+      }
+    }, KEEPALIVE_INTERVAL_MS);
+    sseKeepAliveTimers.set(res, timer);
+  }
+  res.on("close", () => {
+    cleanupSseClient(res);
+  });
+  res.on("error", () => {
+    cleanupSseClient(res);
+  });
+}
+
 function broadcastUpdate() {
-  const payload = `data: ${JSON.stringify(collectionFromNodes())}\n\n`;
-  for (const client of sseClients) {
-    client.write(payload);
+  const payload = `data: ${JSON.stringify(collectionWithDerivedState())}\n\n`;
+  for (const client of Array.from(sseClients)) {
+    try {
+      client.write(payload);
+    } catch (error) {
+      cleanupSseClient(client);
+    }
   }
 }
 
 async function persistNodes() {
   const collection = collectionFromNodes();
-  await fsPromises.mkdir(path.dirname(DATA_FILE), { recursive: true });
-  await fsPromises.writeFile(DATA_FILE, JSON.stringify(collection, null, 2));
+  const dir = path.dirname(DATA_FILE);
+  await fsPromises.mkdir(dir, { recursive: true });
+  const payload = JSON.stringify(collection, null, 2);
+  const tempFile = path.join(
+    dir,
+    `.nodes.tmp-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  );
+
+  await fsPromises.writeFile(tempFile, payload, { encoding: "utf8" });
+  await fsPromises.rename(tempFile, DATA_FILE);
 }
 
 async function loadInitialNodes() {
@@ -190,27 +335,59 @@ async function loadInitialNodes() {
   nodes = new Map();
 }
 
-function sendJson(res, statusCode, payload, extraHeaders = {}) {
+function sendJson(
+  req,
+  res,
+  statusCode,
+  payload,
+  extraHeaders = {},
+  allowedOrigins = READ_ORIGINS
+) {
+  const originHeader = resolveAllowedOrigin(req.headers.origin, allowedOrigins);
   const headers = { ...jsonHeaders, ...extraHeaders };
+  if (originHeader) {
+    headers["Access-Control-Allow-Origin"] = originHeader;
+    if (originHeader !== "*") {
+      headers["Vary"] = headers["Vary"]
+        ? `${headers["Vary"]}, Origin`
+        : "Origin";
+    }
+  }
   res.writeHead(statusCode, headers);
   res.end(JSON.stringify(payload));
 }
 
-function sendText(res, statusCode, text) {
-  res.writeHead(statusCode, {
+function sendText(req, res, statusCode, text, allowedOrigins = READ_ORIGINS) {
+  const originHeader = resolveAllowedOrigin(req.headers.origin, allowedOrigins);
+  const headers = {
     "Content-Type": "text/plain; charset=utf-8",
-    "Access-Control-Allow-Origin": "*",
-  });
+  };
+  if (originHeader) {
+    headers["Access-Control-Allow-Origin"] = originHeader;
+    if (originHeader !== "*") {
+      headers["Vary"] = "Origin";
+    }
+  }
+  res.writeHead(statusCode, headers);
   res.end(text);
 }
 
-function handleOptions(res) {
-  res.writeHead(204, {
-    "Access-Control-Allow-Origin": "*",
+function handleOptions(req, res, allowedOrigins) {
+  const originHeader = resolveAllowedOrigin(req.headers.origin, allowedOrigins);
+  const headers = {
     "Access-Control-Allow-Methods": allowedMethods.join(", "),
-    "Access-Control-Allow-Headers": "content-type",
+    "Access-Control-Allow-Headers": "content-type, authorization",
     "Access-Control-Max-Age": "600",
-  });
+  };
+
+  if (originHeader) {
+    headers["Access-Control-Allow-Origin"] = originHeader;
+    if (originHeader !== "*") {
+      headers["Vary"] = "Origin";
+    }
+  }
+
+  res.writeHead(204, headers);
   res.end();
 }
 
@@ -277,30 +454,41 @@ function collectionWithDerivedState() {
 async function handleRequest(req, res) {
   const method = req.method || "GET";
 
+  const url = new URL(req.url, `http://${req.headers.host}`);
+
   if (method === "OPTIONS") {
-    handleOptions(res);
+    const requestedMethod = req.headers["access-control-request-method"];
+    const allowList =
+      url.pathname.startsWith("/api/nodes") &&
+      requestedMethod &&
+      ["POST", "PUT", "DELETE"].includes(requestedMethod.toUpperCase())
+        ? WRITE_ORIGINS
+        : READ_ORIGINS;
+    handleOptions(req, res, allowList);
     return;
   }
 
-  const url = new URL(req.url, `http://${req.headers.host}`);
-
   if (method === "GET" && url.pathname === "/api/nodes") {
-    sendJson(res, 200, collectionWithDerivedState());
+    sendJson(req, res, 200, collectionWithDerivedState(), {}, READ_ORIGINS);
     return;
   }
 
   if (method === "GET" && url.pathname === "/api/nodes/stream") {
-    res.writeHead(200, {
+    const originHeader = resolveAllowedOrigin(req.headers.origin, READ_ORIGINS);
+    const headers = {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
       Connection: "keep-alive",
-      "Access-Control-Allow-Origin": "*",
-    });
+    };
+    if (originHeader) {
+      headers["Access-Control-Allow-Origin"] = originHeader;
+      if (originHeader !== "*") {
+        headers["Vary"] = "Origin";
+      }
+    }
+    res.writeHead(200, headers);
     res.write(`data: ${JSON.stringify(collectionWithDerivedState())}\n\n`);
-    sseClients.add(res);
-    req.on("close", () => {
-      sseClients.delete(res);
-    });
+    registerSseClient(res);
     return;
   }
 
@@ -313,111 +501,194 @@ async function handleRequest(req, res) {
       const id = decodeURIComponent(parts[0]);
       const feature = nodes.get(id);
       if (!feature) {
-        sendJson(res, 404, { error: "Node not found" });
+        sendJson(req, res, 404, { error: "Node not found" });
         return;
       }
-      sendJson(res, 200, augmentWithOnlineStatus(feature));
+      sendJson(req, res, 200, augmentWithOnlineStatus(feature));
       return;
     }
 
     if (parts.length === 1 && method === "DELETE") {
-      const id = decodeURIComponent(parts[0]);
-      if (!nodes.has(id)) {
-        sendJson(res, 404, { error: "Node not found" });
+      if (!ensureWriteAuthorized(req, res)) {
         return;
       }
-      removeNode(id);
-      await persistNodes();
-      sendJson(res, 204, {});
+      const id = decodeURIComponent(parts[0]);
+      const deleted = await withWriteLock(async () => {
+        if (!nodes.has(id)) {
+          return false;
+        }
+        removeNode(id);
+        await persistNodes();
+        return true;
+      });
+      if (!deleted) {
+        sendJson(req, res, 404, { error: "Node not found" }, {}, WRITE_ORIGINS);
+        return;
+      }
+      sendJson(req, res, 204, {}, {}, WRITE_ORIGINS);
       broadcastUpdate();
       return;
     }
 
     if (parts.length === 2 && parts[1] === "ping" && method === "PUT") {
-      const id = decodeURIComponent(parts[0]);
-      const existing = nodes.get(id);
-      if (!existing) {
-        sendJson(res, 404, { error: "Node not found" });
+      if (!ensureWriteAuthorized(req, res)) {
         return;
       }
-
+      const id = decodeURIComponent(parts[0]);
       let body = {};
       try {
         body = (await getRequestBody(req)) || {};
       } catch (error) {
-        sendJson(res, 400, { error: error.message });
+        sendJson(req, res, 400, { error: error.message }, {}, WRITE_ORIGINS);
         return;
       }
 
       const lastSeen = body.last_seen ? new Date(body.last_seen) : new Date();
       if (Number.isNaN(lastSeen.getTime())) {
-        sendJson(res, 400, { error: "Invalid last_seen timestamp" });
+        sendJson(req, res, 400, { error: "Invalid last_seen timestamp" }, {}, WRITE_ORIGINS);
         return;
       }
 
-      const updated = {
-        ...existing,
-        properties: {
-          ...existing.properties,
-          ...body.properties,
-          last_seen: lastSeen.toISOString(),
-        },
-      };
-
+      let normalizedGeometry;
       if (body.geometry) {
         try {
-          updated.geometry = normalizeGeometry(body.geometry);
+          normalizedGeometry = normalizeGeometry(body.geometry);
         } catch (error) {
-          sendJson(res, 400, { error: error.message });
+          sendJson(req, res, 400, { error: error.message }, {}, WRITE_ORIGINS);
           return;
         }
       }
 
-      upsertNode(updated);
-      await persistNodes();
-      sendJson(res, 200, augmentWithOnlineStatus(updated));
+      let updateResult;
+      try {
+        updateResult = await withWriteLock(async () => {
+          const existing = nodes.get(id);
+          if (!existing) {
+            return { found: false };
+          }
+
+          const updated = {
+            ...existing,
+            properties: {
+              ...existing.properties,
+              ...body.properties,
+              last_seen: lastSeen.toISOString(),
+            },
+          };
+
+          if (normalizedGeometry) {
+            updated.geometry = normalizedGeometry;
+          }
+
+          upsertNode(updated);
+          await persistNodes();
+          return { found: true, feature: updated };
+        });
+      } catch (error) {
+        console.error("Failed to persist heartbeat", error);
+        sendJson(req, res, 500, { error: "Internal server error" }, {}, WRITE_ORIGINS);
+        return;
+      }
+
+      if (!updateResult.found) {
+        sendJson(req, res, 404, { error: "Node not found" }, {}, WRITE_ORIGINS);
+        return;
+      }
+
+      sendJson(
+        req,
+        res,
+        200,
+        augmentWithOnlineStatus(updateResult.feature),
+        {},
+        WRITE_ORIGINS
+      );
       broadcastUpdate();
       return;
     }
   }
 
   if (method === "POST" && url.pathname === "/api/nodes") {
+    if (!ensureWriteAuthorized(req, res)) {
+      return;
+    }
     let body;
     try {
       body = await getRequestBody(req);
     } catch (error) {
-      sendJson(res, 400, { error: error.message });
+      sendJson(req, res, 400, { error: error.message }, {}, WRITE_ORIGINS);
       return;
     }
 
     if (!body) {
-      sendJson(res, 400, { error: "Missing request body" });
+      sendJson(req, res, 400, { error: "Missing request body" }, {}, WRITE_ORIGINS);
       return;
     }
 
     try {
-      const feature = parseIncomingFeature(body, nodes.size);
-      const id = feature.properties.id;
-      if (nodes.has(id)) {
-        sendJson(res, 409, { error: "Node with that id already exists" });
+      const result = await withWriteLock(async () => {
+        let feature;
+        try {
+          feature = parseIncomingFeature(body, nodes.size);
+        } catch (error) {
+          error.statusCode = 400;
+          throw error;
+        }
+        const id = feature.properties.id;
+        if (nodes.has(id)) {
+          return { error: "conflict" };
+        }
+
+        upsertNode(feature);
+        await persistNodes();
+        return { feature };
+      });
+
+      if (result.error === "conflict") {
+        sendJson(
+          req,
+          res,
+          409,
+          { error: "Node with that id already exists" },
+          {},
+          WRITE_ORIGINS
+        );
         return;
       }
 
-      upsertNode(feature);
-      await persistNodes();
-      const responsePayload = augmentWithOnlineStatus(feature);
-      sendJson(res, 201, responsePayload, {
-        Location: `/api/nodes/${encodeURIComponent(feature.properties.id)}`,
-      });
+      const responsePayload = augmentWithOnlineStatus(result.feature);
+      sendJson(
+        req,
+        res,
+        201,
+        responsePayload,
+        {
+          Location: `/api/nodes/${encodeURIComponent(
+            result.feature.properties.id
+          )}`,
+        },
+        WRITE_ORIGINS
+      );
       broadcastUpdate();
       return;
     } catch (error) {
-      sendJson(res, 400, { error: error.message });
+      const status = error && error.statusCode ? error.statusCode : 500;
+      if (status === 500) {
+        console.error("Failed to register node", error);
+      }
+      sendJson(
+        req,
+        res,
+        status,
+        { error: error && error.message ? error.message : "Internal server error" },
+        {},
+        WRITE_ORIGINS
+      );
       return;
     }
   }
 
-  sendJson(res, 404, { error: "Not found" });
+  sendJson(req, res, 404, { error: "Not found" });
 }
 
 async function start() {
@@ -427,7 +698,7 @@ async function start() {
     handleRequest(req, res).catch((error) => {
       console.error("Unhandled error:", error);
       try {
-        sendJson(res, 500, { error: "Internal server error" });
+        sendJson(req, res, 500, { error: "Internal server error" });
       } catch (sendError) {
         res.destroy(sendError);
       }

@@ -1,11 +1,80 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-import L from "leaflet";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 // Leaflet CSS is loaded from docusaurus.config.js stylesheets, so we do not import it here.
 
 const POLL_INTERVAL_MS = 30_000;
 const ONLINE_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes
 const FALLBACK_STATIC_DATA = "/data/global_map_layer.geojson";
+
+const isSafeHttpUrl = (value) => {
+  if (!value || typeof value !== "string") {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+      return parsed.href;
+    }
+  } catch (error) {
+    return null;
+  }
+
+  return null;
+};
+
+const createInfoRow = (label, value) => {
+  const row = document.createElement("div");
+  const strong = document.createElement("strong");
+  strong.textContent = `${label}:`;
+  row.appendChild(strong);
+  row.appendChild(document.createTextNode(` ${value}`));
+  return row;
+};
+
+const buildPopupContent = (properties) => {
+  const container = document.createElement("div");
+  const title = document.createElement("strong");
+  title.textContent = properties.node_name || "Unknown node";
+  container.appendChild(title);
+
+  container.appendChild(document.createElement("br"));
+
+  container.appendChild(
+    createInfoRow("Status", properties._isOnline ? "Online" : "Offline")
+  );
+  container.appendChild(
+    createInfoRow("Last seen", properties.last_seen || "—")
+  );
+  container.appendChild(createInfoRow("Type", properties.node_type || "—"));
+  container.appendChild(
+    createInfoRow("Email", properties.contact_email || "—")
+  );
+
+  const languages = Array.isArray(properties.languages)
+    ? properties.languages.join(", ") || "—"
+    : "—";
+  container.appendChild(createInfoRow("Languages", languages));
+
+  const categories = Array.isArray(properties.ping_categories)
+    ? properties.ping_categories.join(", ") || "—"
+    : "—";
+  container.appendChild(createInfoRow("Categories", categories));
+
+  const safeForkUrl = isSafeHttpUrl(properties.fork_repo);
+  if (safeForkUrl) {
+    const linkRow = document.createElement("div");
+    const anchor = document.createElement("a");
+    anchor.href = safeForkUrl;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+    anchor.textContent = "Fork repo";
+    linkRow.appendChild(anchor);
+    container.appendChild(linkRow);
+  }
+
+  return container;
+};
 
 const buildEndpoint = (baseUrl, path) => {
   if (!baseUrl) {
@@ -16,9 +85,10 @@ const buildEndpoint = (baseUrl, path) => {
   return `${trimmed}${path}`;
 };
 
-export default function GlobalMap() {
+function GlobalMapContent({ MapContainer, TileLayer, GeoJSON, L }) {
   const [geoJsonData, setGeoJsonData] = useState(null);
-  const [isBrowser, setIsBrowser] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isUsingFallback, setIsUsingFallback] = useState(false);
   const mapRef = useRef(null);
 
   const registryBaseUrl =
@@ -32,14 +102,6 @@ export default function GlobalMap() {
   );
 
   useEffect(() => {
-    setIsBrowser(typeof window !== "undefined");
-  }, []);
-
-  useEffect(() => {
-    if (!isBrowser) {
-      return undefined;
-    }
-
     let isActive = true;
     const controller = new AbortController();
 
@@ -82,7 +144,17 @@ export default function GlobalMap() {
 
         const json = await response.json();
         if (isActive) {
-          setGeoJsonData(enhanceFeatures(json));
+          const enhanced = enhanceFeatures(json);
+          setGeoJsonData(enhanced);
+          if (attemptFallback) {
+            setIsUsingFallback(true);
+            setErrorMessage(
+              "Live registry is unavailable. Displaying the last published snapshot."
+            );
+          } else {
+            setIsUsingFallback(false);
+            setErrorMessage(null);
+          }
         }
       } catch (error) {
         if (error.name === "AbortError") {
@@ -94,6 +166,12 @@ export default function GlobalMap() {
           load(true);
         } else {
           console.error("Failed to load fallback GeoJSON:", error);
+          if (isActive) {
+            setIsUsingFallback(false);
+            setErrorMessage(
+              "Unable to load registry or fallback data. Please try again later."
+            );
+          }
         }
       }
     };
@@ -106,7 +184,7 @@ export default function GlobalMap() {
       controller.abort();
       window.clearInterval(intervalId);
     };
-  }, [isBrowser, nodesEndpoint]);
+  }, [nodesEndpoint]);
 
   useEffect(() => {
     if (geoJsonData && mapRef.current) {
@@ -125,15 +203,6 @@ export default function GlobalMap() {
     }
   }, [geoJsonData]);
 
-  if (!isBrowser) {
-    return (
-      <div style={{ padding: 16 }}>
-        <h1>Agrinet Global Map</h1>
-        <p>Loading map…</p>
-      </div>
-    );
-  }
-
   const displayEndpoint = nodesEndpoint || "/api/nodes";
 
   return (
@@ -147,6 +216,22 @@ export default function GlobalMap() {
         cannot be reached, the map falls back to the last published static
         dataset.
       </p>
+
+      {errorMessage && (
+        <div
+          role="status"
+          style={{
+            background: "#fff3cd",
+            border: "1px solid #ffeeba",
+            color: "#856404",
+            borderRadius: 6,
+            padding: "12px 16px",
+            marginBottom: 16,
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
 
       <div style={{ height: 600, borderRadius: 6, overflow: "hidden" }}>
         <MapContainer
@@ -179,39 +264,15 @@ export default function GlobalMap() {
               }}
               onEachFeature={(feature, layer) => {
                 const p = feature.properties || {};
-                const languages =
-                  Array.isArray(p.languages) && p.languages.length
-                    ? p.languages.join(", ")
-                    : "—";
-                const categories =
-                  Array.isArray(p.ping_categories) && p.ping_categories.length
-                    ? p.ping_categories.join(", ")
-                    : "—";
-                const lastSeenDate = p.last_seen ? new Date(p.last_seen) : null;
-                const lastSeenDisplay =
-                  lastSeenDate && !Number.isNaN(lastSeenDate)
-                    ? lastSeenDate.toLocaleString()
-                    : "—";
-                const status = p._isOnline ? "Online" : "Offline";
+                const popupContent = buildPopupContent({
+                  ...p,
+                  last_seen:
+                    p.last_seen && !Number.isNaN(new Date(p.last_seen))
+                      ? new Date(p.last_seen).toLocaleString()
+                      : "—",
+                });
 
-                const forkLink = p.fork_repo
-                  ? `<a href="${p.fork_repo}" target="_blank" rel="noreferrer">Fork repo</a>`
-                  : "";
-
-                const html = `
-                  <div>
-                    <strong>${p.node_name || "Unknown node"}</strong><br/>
-                    <strong>Status:</strong> ${status}<br/>
-                    <strong>Last seen:</strong> ${lastSeenDisplay}<br/>
-                    <strong>Type:</strong> ${p.node_type || "—"}<br/>
-                    <strong>Email:</strong> ${p.contact_email || "—"}<br/>
-                    <strong>Languages:</strong> ${languages}<br/>
-                    <strong>Categories:</strong> ${categories}<br/>
-                    ${forkLink}
-                  </div>
-                `;
-
-                layer.bindPopup(html);
+                layer.bindPopup(popupContent);
               }}
             />
           )}
@@ -222,7 +283,39 @@ export default function GlobalMap() {
         <a href="/data/global_map_layer.geojson" download>
           Download the latest published GeoJSON snapshot
         </a>
+        {isUsingFallback && !errorMessage && (
+          <span style={{ marginLeft: 8 }}>
+            (Currently displaying the fallback dataset.)
+          </span>
+        )}
       </p>
     </div>
+  );
+}
+
+export default function GlobalMap() {
+  return (
+    <BrowserOnly
+      fallback={
+        <div style={{ padding: 16 }}>
+          <h1>Agrinet Global Map</h1>
+          <p>Loading map…</p>
+        </div>
+      }
+    >
+      {() => {
+        const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
+        // eslint-disable-next-line global-require
+        const L = require("leaflet");
+        return (
+          <GlobalMapContent
+            MapContainer={MapContainer}
+            TileLayer={TileLayer}
+            GeoJSON={GeoJSON}
+            L={L}
+          />
+        );
+      }}
+    </BrowserOnly>
   );
 }

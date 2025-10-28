@@ -56,7 +56,45 @@ yarn start
 
 Set the `AGRINET_REGISTRY_URL` environment variable at build/runtime if the API
 lives on a different domain than the docs (for example,
-`AGRINET_REGISTRY_URL=https://registry.example.org`). Nodes can register
-themselves with `POST /api/nodes`, send heartbeat updates via
+`AGRINET_REGISTRY_URL=https://registry.example.org`).
+
+### Authentication & CORS
+
+Write operations are disabled unless you provide a shared secret via
+`REGISTRY_WRITE_TOKEN`. Clients must send this token in an `Authorization`
+header (Bearer token) or an `x-api-key` header when calling `POST`, `PUT`, or
+`DELETE` endpoints. Configure the optional `REGISTRY_READ_ORIGINS` and
+`REGISTRY_WRITE_ORIGINS` environment variables (comma-separated lists) to
+restrict which browsers may call the read or write APIs. By default reads allow
+any origin and writes only respond to same-origin requests.
+
+Example of registering a node and sending a heartbeat with a token stored in
+`$REGISTRY_WRITE_TOKEN`:
+
+```bash
+curl -H "Authorization: Bearer $REGISTRY_WRITE_TOKEN" \
+  -H "Content-Type: application/json" \
+  -X POST http://localhost:4000/api/nodes \
+  -d '{
+    "type": "Feature",
+    "properties": {
+      "node_name": "Example node",
+      "contact_email": "ops@example.org"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [36.82, -1.29]
+    }
+  }'
+
+curl -H "Authorization: Bearer $REGISTRY_WRITE_TOKEN" \
+  -H "Content-Type: application/json" \
+  -X PUT http://localhost:4000/api/nodes/example-node/ping \
+  -d '{"last_seen": "2025-01-01T00:00:00Z"}'
+```
+
+Nodes can register themselves with `POST /api/nodes`, send heartbeat updates via
 `PUT /api/nodes/:id/ping`, and map clients consume the `GET /api/nodes`
-endpoint.
+endpoint. The server persists data to `server/nodes.json` using atomic file
+writes and also seeds from `static/data/global_map_layer.geojson` if no
+database has been created yet.
