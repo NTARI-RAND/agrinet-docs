@@ -149,7 +149,7 @@ const config = {
               { label: "Reddit", href: "https://www.reddit.com/r/NTARIorg/" },
               {
                 label: "LinkedIn",
-                href: "https://www.linkedin.com/company/ntari/",
+                href: "https://www.linkedin.com/company/ntari/Agrinet",
               },
             ],
           },
