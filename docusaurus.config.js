@@ -50,7 +50,31 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "en",
-    locales: ["en"],
+    locales: ["en", "fr", "ja", "ko", "zh-Hans", "es", "tr"],
+    localeConfigs: {
+      en: {
+        label: "English",
+      },
+      fr: {
+        label: "Français",
+      },
+      ja: {
+        label: "日本語",
+      },
+      ko: {
+        label: "한국어",
+      },
+      "zh-Hans": {
+        label: "简体中文",
+        htmlLang: "zh-Hans",
+      },
+      es: {
+        label: "Español",
+      },
+      tr: {
+        label: "Türkçe",
+      },
+    },
   },
 
   presets: [
@@ -105,10 +129,20 @@ const config = {
             label: "Tutorial",
           },
           { to: "/blog", label: "Blog", position: "left" },
+          {
+            to: "/translations",
+            label: "Translations",
+            position: "left",
+            className: "navbar__item--translations",
+          },
           { to: "/global-map", label: "Global Map", position: "left" },
           {
             href: "https://github.com/NTARI-RAND/Agrinet/releases",
             label: "GitHub",
+            position: "right",
+          },
+          {
+            type: "localeDropdown",
             position: "right",
           },
         ],

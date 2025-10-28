@@ -1,16 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-import L from "leaflet";
 import Layout from "@theme/Layout";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 // Leaflet CSS is loaded from docusaurus.config.js stylesheets, so we do not import it here.
 
 export default function GlobalMap() {
   const [geoJsonData, setGeoJsonData] = useState(null);
-  const [isBrowser, setIsBrowser] = useState(false);
+  const [leaflet, setLeaflet] = useState(null);
   const mapRef = useRef(null);
 
   useEffect(() => {
-    setIsBrowser(typeof window !== "undefined");
+    let isMounted = true;
+
+    import("leaflet")
+      .then((module) => {
+        if (isMounted) {
+          setLeaflet(module.default ?? module);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load Leaflet:", err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -26,9 +39,9 @@ export default function GlobalMap() {
   }, []);
 
   useEffect(() => {
-    if (geoJsonData && mapRef.current) {
+    if (leaflet && geoJsonData && mapRef.current) {
       try {
-        const bounds = L.geoJSON(geoJsonData).getBounds();
+        const bounds = leaflet.geoJSON(geoJsonData).getBounds();
         if (
           bounds && typeof bounds.isValid === "function"
             ? bounds.isValid()
@@ -40,18 +53,7 @@ export default function GlobalMap() {
         console.warn("Could not fit bounds:", e);
       }
     }
-  }, [geoJsonData]);
-
-  if (!isBrowser) {
-    return (
-      <Layout title="Agrinet Global Map">
-        <div style={{ padding: 16 }}>
-          <h1>Agrinet Global Map</h1>
-          <p>Loading map…</p>
-        </div>
-      </Layout>
-    );
-  }
+  }, [leaflet, geoJsonData]);
 
   return (
     <Layout title="Agrinet Global Map">
@@ -64,47 +66,55 @@ export default function GlobalMap() {
         </p>
 
         <div style={{ height: 600, borderRadius: 6, overflow: "hidden" }}>
-          <MapContainer
-            center={[0, 0]}
-            zoom={2}
-            style={{ height: "100%", width: "100%" }}
-            whenCreated={(mapInstance) => {
-              mapRef.current = mapInstance;
-            }}
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution="&copy; OpenStreetMap contributors"
-            />
+          <BrowserOnly fallback={<div style={{ padding: 16 }}>Loading map…</div>}>
+            {() => {
+              const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
 
-            {geoJsonData && (
-              <GeoJSON
-                data={geoJsonData}
-                onEachFeature={(feature, layer) => {
-                  const p = feature.properties || {};
-                  const html = `
-                    <div>
-                      <strong>${p.node_name || "Unknown node"}</strong><br/>
-                      <strong>Type:</strong> ${p.node_type || "—"}<br/>
-                      <strong>Email:</strong> ${p.contact_email || "—"}<br/>
-                      <strong>Languages:</strong> ${(p.languages || []).join(
-                        ", "
-                      )}<br/>
-                      <a href="${
-                        p.fork_repo || "#"
-                      }" target="_blank" rel="noreferrer">Fork repo</a>
-                    </div>
-                  `;
-                  layer.bindPopup(html);
-                }}
-                style={() => ({
-                  color: "#2b87ff",
-                  weight: 2,
-                  fillOpacity: 0.6,
-                })}
-              />
-            )}
-          </MapContainer>
+              return (
+                <MapContainer
+                  center={[0, 0]}
+                  zoom={2}
+                  style={{ height: "100%", width: "100%" }}
+                  whenCreated={(mapInstance) => {
+                    mapRef.current = mapInstance;
+                  }}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="&copy; OpenStreetMap contributors"
+                  />
+
+                  {geoJsonData && (
+                    <GeoJSON
+                      data={geoJsonData}
+                      onEachFeature={(feature, layer) => {
+                        const p = feature.properties || {};
+                        const html = `
+                          <div>
+                            <strong>${p.node_name || "Unknown node"}</strong><br/>
+                            <strong>Type:</strong> ${p.node_type || "—"}<br/>
+                            <strong>Email:</strong> ${p.contact_email || "—"}<br/>
+                            <strong>Languages:</strong> ${(p.languages || [])
+                              .filter(Boolean)
+                              .join(", ")}<br/>
+                            <a href="${
+                              p.fork_repo || "#"
+                            }" target="_blank" rel="noreferrer">Fork repo</a>
+                          </div>
+                        `;
+                        layer.bindPopup(html);
+                      }}
+                      style={() => ({
+                        color: "#2b87ff",
+                        weight: 2,
+                        fillOpacity: 0.6,
+                      })}
+                    />
+                  )}
+                </MapContainer>
+              );
+            }}
+          </BrowserOnly>
         </div>
 
         <p style={{ marginTop: 12 }}>
