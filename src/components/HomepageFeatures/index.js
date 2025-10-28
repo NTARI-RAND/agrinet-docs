@@ -4,32 +4,36 @@ import styles from "./styles.module.css";
 
 const FeatureList = [
   {
-    title: "Easy to Use",
+    title: "Connected Rural Communities",
     Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Agrinet delivers dependable last-mile connectivity so farmers,
+        cooperatives, and agribusinesses can collaborate, share best practices,
+        and access vital services in real time.
       </>
     ),
   },
   {
-    title: "Focus on What Matters",
+    title: "Actionable Farm Intelligence",
     Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Integrate field data, weather insights, and market trends into a single
+        Agrinet dashboard that helps stakeholders make faster, data-backed
+        decisions that improve yields and resilience <code>docs</code>{" "}
+        directory.
       </>
     ),
   },
   {
-    title: "Powered by React",
+    title: "Resilient Digital Infrastructure",
     Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Agrinet combines scalable cloud services with edge-ready hardware to
+        ensure reliable operations even in challenging environments, keeping
+        agricultural networks running around the clock.
       </>
     ),
   },
