@@ -149,7 +149,7 @@ const config = {
               { label: "Reddit", href: "https://www.reddit.com/r/NTARIorg/" },
               {
                 label: "LinkedIn",
-                href: "https://www.linkedin.com/company/ntari/Agrinet",
+                href: "https://www.linkedin.com/company/ntari",
               },
             ],
           },
@@ -162,7 +162,7 @@ const config = {
               { label: "Terms", to: "/terms" },
               {
                 label: "GitHub",
-                href: "https://github.com/NTARI-RAND",
+                href: "https://github.com/NTARI-RAND/Agrinet",
               },
             ],
           },
