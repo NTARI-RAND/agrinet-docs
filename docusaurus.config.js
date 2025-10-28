@@ -107,7 +107,7 @@ const config = {
           { to: "/blog", label: "Blog", position: "left" },
           { to: "/global-map", label: "Global Map", position: "left" },
           {
-            href: "https://github.com/NTARI-RAND/Agrinet",
+            href: "https://github.com/NTARI-RAND/Agrinet/releases",
             label: "GitHub",
             position: "right",
           },
