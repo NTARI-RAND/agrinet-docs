@@ -12,7 +12,9 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "dev": "docusaurus start"
+    "dev": "docusaurus start",
+    "i18n:bootstrap": "node tools/translations/bootstrap-locales.mjs",
+    "i18n:build": "node tools/translations/build-locales.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "3.9.2",
