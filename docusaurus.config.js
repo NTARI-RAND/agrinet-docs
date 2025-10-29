@@ -137,7 +137,7 @@ const config = {
           },
           { to: "/global-map", label: "Global Map", position: "left" },
           {
-            href: "https://github.com/NTARI-RAND/Agrinet",
+            href: "https://github.com/NTARI-RAND/Agrinet/releases",
             label: "GitHub",
             position: "right",
           },
@@ -183,7 +183,7 @@ const config = {
               { label: "Reddit", href: "https://www.reddit.com/r/NTARIorg/" },
               {
                 label: "LinkedIn",
-                href: "https://www.linkedin.com/company/ntari/",
+                href: "https://www.linkedin.com/company/ntari",
               },
             ],
           },
@@ -196,7 +196,7 @@ const config = {
               { label: "Terms", to: "/terms" },
               {
                 label: "GitHub",
-                href: "https://github.com/NTARI-RAND",
+                href: "https://github.com/NTARI-RAND/Agrinet",
               },
             ],
           },
