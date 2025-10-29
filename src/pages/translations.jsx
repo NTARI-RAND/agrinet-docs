@@ -365,6 +365,89 @@ export default function TranslationsPage() {
 
         <section className={styles.section}>
           <h2>
+            <Translate id="translations.section.localePlan.title">Locale readiness plan</Translate>
+          </h2>
+          <div className={styles.infoCard}>
+            <ol className={styles.infoList}>
+              <li>
+                <Translate
+                  id="translations.section.localePlan.stepOne"
+                  values={{
+                    bootstrapScript: <code>node tools/translations/bootstrap-locales.mjs</code>,
+                    introLink: (
+                      <a
+                        href="https://docusaurus.io/docs/i18n/introduction"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {translate({
+                          id: "translations.section.localePlan.introLinkText",
+                          message: "internationalization overview",
+                        })}
+                      </a>
+                    ),
+                    tutorialLink: (
+                      <a
+                        href="https://docusaurus.io/docs/i18n/tutorial"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {translate({
+                          id: "translations.section.localePlan.tutorialLinkText",
+                          message: "step-by-step tutorial",
+                        })}
+                      </a>
+                    ),
+                  }}
+                >
+                  {"Run {bootstrapScript} to extract fresh string catalogs for each configured locale. Review the {introLink} and {tutorialLink} so your team knows which JSON and Markdown files to translate before committing them under i18n/."}
+                </Translate>
+              </li>
+              <li>
+                <Translate
+                  id="translations.section.localePlan.stepTwo"
+                  values={{
+                    crowdinLink: (
+                      <a
+                        href="https://docusaurus.io/docs/i18n/crowdin"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {translate({
+                          id: "translations.section.localePlan.crowdinLinkText",
+                          message: "Crowdin integration guide",
+                        })}
+                      </a>
+                    ),
+                  }}
+                >
+                  {"Translate the generated content manually or by connecting your workspace through the {crowdinLink}. Keep terminology aligned with the Agrinet glossary before submitting pull requests."}
+                </Translate>
+              </li>
+              <li>
+                <Translate
+                  id="translations.section.localePlan.stepThree"
+                  values={{
+                    buildScript: <code>node tools/translations/build-locales.mjs</code>,
+                    gitLink: (
+                      <a href="https://docusaurus.io/docs/i18n/git" target="_blank" rel="noopener noreferrer">
+                        {translate({
+                          id: "translations.section.localePlan.gitLinkText",
+                          message: "i18n Git workflow",
+                        })}
+                      </a>
+                    ),
+                  }}
+                >
+                  {"Verify every language renders by running {buildScript} and publish the resulting build/<locale>/ directories using the {gitLink}. This prevents 404s on routes such as /fr/ and keeps deployments in sync."}
+                </Translate>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2>
             <Translate id="translations.section.resources.title">Resources</Translate>
           </h2>
           <div className={styles.infoCard}>
