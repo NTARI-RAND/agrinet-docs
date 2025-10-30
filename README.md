@@ -42,7 +42,7 @@ If you are using GitHub pages for hosting, this command is a convenient way to b
 
 ## Search configuration
 
-The site bundles a local documentation search that works without any external services so local development and preview deployments always include a working search bar. When real Algolia DocSearch credentials are present we automatically switch to Algolia, optionally enabling Ask AI if its values are available.
+The site bundles a local documentation search that works without any external services so local development and preview deployments always include a working search bar. When real Algolia DocSearch credentials are present we automatically switch to Algolia, optionally enabling Ask AI if its values are available. The Algolia-powered experience adopts a React.dev-inspired pill trigger with a dedicated Ask AI badge so visitors immediately discover when conversational answers are available.
 
 Create a `.env` file (or export the variables in your shell) with the following values to enable Algolia search and Ask AI:
 
