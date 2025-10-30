@@ -149,13 +149,21 @@ function createDocIndex(allDocsData) {
       version.docs.map((doc) => {
         const description = doc.description || doc.frontMatter?.description || "";
         const keywords = Array.isArray(doc.keywords) ? doc.keywords : [];
+        const fallbackTitle =
+          doc.title ??
+          doc.frontMatter?.title ??
+          doc.frontMatter?.sidebar_label ??
+          doc.sidebar_label ??
+          doc.id ??
+          "";
+        const title = typeof fallbackTitle === "string" ? fallbackTitle : String(fallbackTitle);
 
         return {
           id: doc.id,
-          title: doc.title,
+          title,
           description,
           permalink: doc.permalink,
-          searchText: `${doc.title} ${description} ${keywords.join(" ")}`.toLowerCase(),
+          searchText: `${title} ${description} ${keywords.join(" ")}`.toLowerCase(),
         };
       }),
     ),
