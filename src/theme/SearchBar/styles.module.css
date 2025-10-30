@@ -1,0 +1,85 @@
+.searchBar {
+  position: relative;
+  width: var(--docsearch-width, 260px);
+  max-width: 100%;
+}
+
+.form {
+  margin: 0;
+}
+
+.input {
+  width: 100%;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-navbar-search-input-background-color, var(--ifm-background-surface-color));
+  color: inherit;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ifm-color-primary) 25%, transparent);
+  background-color: var(--ifm-navbar-search-input-background-color, var(--ifm-background-surface-color));
+}
+
+.results {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0.5rem 0;
+  list-style: none;
+  background-color: var(--ifm-card-background-color);
+  border-radius: var(--ifm-global-radius);
+  box-shadow: var(--ifm-global-shadow-lw);
+  max-height: min(70vh, 460px);
+  overflow-y: auto;
+  z-index: 50;
+}
+
+.resultLink {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.resultLink:hover,
+.resultLink:focus,
+.resultLinkActive {
+  background-color: var(--ifm-hover-overlay);
+}
+
+.resultTitle {
+  display: block;
+  font-weight: 600;
+}
+
+.resultDescription {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.empty {
+  padding: 0.5rem 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  font-style: italic;
+}
+
+@media (max-width: 996px) {
+  .searchBar {
+    width: 100%;
+  }
+
+  .results {
+    right: auto;
+    left: 0;
+    width: 100%;
+  }
+}
