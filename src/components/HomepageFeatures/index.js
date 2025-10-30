@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 const FeatureList = [
   {
     title: "Connected Rural Communities",
-    Svg: require("@site/static/img/arginet_mountain.svg").default,
+    Svg: require("@site/static/img/agrinet_mountains.svg").default,
     description: (
       <>
         Agrinet delivers dependable last-mile connectivity so farmers,
