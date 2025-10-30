@@ -27,7 +27,10 @@ const locales = [
 ];
 
 const localeConfigs = Object.fromEntries(
-  locales.map(({ code, label, htmlLang }) => [code, { label, ...(htmlLang ? { htmlLang } : {}) }]),
+  locales.map(({ code, label, htmlLang }) => [
+    code,
+    { label, ...(htmlLang ? { htmlLang } : {}) },
+  ])
 );
 
 const algoliaAppId = ALGOLIA_APP_ID?.trim();
@@ -35,7 +38,7 @@ const algoliaApiKey = ALGOLIA_API_KEY?.trim();
 const algoliaIndexName = ALGOLIA_INDEX_NAME?.trim();
 
 const hasAlgoliaCredentials = Boolean(
-  algoliaAppId && algoliaApiKey && algoliaIndexName,
+  algoliaAppId && algoliaApiKey && algoliaIndexName
 );
 
 const assistantId = ALGOLIA_ASSISTANT_ID?.trim();
@@ -48,7 +51,7 @@ const hasAskAiCredentials = Boolean(
     assistantId &&
     askAiAppId &&
     askAiApiKey &&
-    askAiIndexName,
+    askAiIndexName
 );
 
 // This runs in Node.js - Don"t use client-side code here (browser APIs, JSX...)
@@ -167,7 +170,7 @@ const config = {
         : {}),
       navbar: {
         title: "v1.0",
-        logo: { alt: "Agrinet Logo", src: "img/logo.svg" },
+        logo: { alt: "Agrinet Logo", src: "img/agrinet.png" },
         items: [
           {
             type: "docSidebar",
