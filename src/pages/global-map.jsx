@@ -187,9 +187,9 @@ function GlobalMapContent() {
   }, [nodesEndpoint]);
 
   useEffect(() => {
-    if (geoJsonData && mapRef.current) {
+    if (leaflet && geoJsonData && mapRef.current) {
       try {
-        const bounds = L.geoJSON(geoJsonData).getBounds();
+        const bounds = leaflet.geoJSON(geoJsonData).getBounds();
         if (
           bounds && typeof bounds.isValid === "function"
             ? bounds.isValid()
@@ -201,7 +201,7 @@ function GlobalMapContent() {
         console.warn("Could not fit bounds:", error);
       }
     }
-  }, [geoJsonData]);
+  }, [leaflet, geoJsonData]);
 
   const displayEndpoint = nodesEndpoint || "/api/nodes";
 
