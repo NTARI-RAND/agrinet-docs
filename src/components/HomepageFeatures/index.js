@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 const FeatureList = [
   {
     title: "Connected Rural Communities",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    Svg: require("@site/static/img/agrinet_mountains.svg").default,
     description: (
       <>
         Agrinet delivers dependable last-mile connectivity so farmers,
@@ -16,7 +16,7 @@ const FeatureList = [
   },
   {
     title: "Actionable Farm Intelligence",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    Svg: require("@site/static/img/agrinet_computers.svg").default,
     description: (
       <>
         Integrate field data, weather insights, and market trends into a single
@@ -28,7 +28,7 @@ const FeatureList = [
   },
   {
     title: "Resilient Digital Infrastructure",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Svg: require("@site/static/img/agrinet_engine_scene.svg").default,
     description: (
       <>
         Agrinet combines scalable cloud services with edge-ready hardware to
