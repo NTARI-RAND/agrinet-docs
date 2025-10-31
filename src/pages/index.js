@@ -33,7 +33,7 @@ export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Agrinet ${siteConfig.title}`}
+      title={`Agrinet`}
       description="Description will go into a meta tag in <head />"
     >
       <HomepageHeader />
