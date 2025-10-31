@@ -42,7 +42,7 @@ If you are using GitHub pages for hosting, this command is a convenient way to b
 
 ## Search configuration
 
-The site bundles a local documentation search that works without any external services so local development and preview deployments always include a working search bar. When real Algolia DocSearch credentials are present we automatically switch to Algolia, optionally enabling Ask AI if its values are available. The Algolia-powered experience adopts a React.dev-inspired pill trigger with a dedicated Ask AI badge so visitors immediately discover when conversational answers are available.
+The site bundles a local documentation search that works without any external services so local development and preview deployments always include a working search bar. When real Algolia DocSearch credentials are present we automatically switch to Algolia. Ask AI is now configured separately so you can enable Algolia search without Ask AI or vice versa, depending on the credentials you supply. The Algolia-powered experience adopts a React.dev-inspired pill trigger with a dedicated Ask AI badge so visitors immediately discover when conversational answers are available.
 
 Create a `.env` file (or export the variables in your shell) with the following values to enable Algolia search and Ask AI:
 
@@ -50,6 +50,8 @@ Create a `.env` file (or export the variables in your shell) with the following 
 ALGOLIA_APP_ID="..."
 ALGOLIA_API_KEY="..."          # Search-only API key
 ALGOLIA_INDEX_NAME="..."
+
+# Optional Ask AI configuration
 ALGOLIA_ASSISTANT_ID="..."     # Algolia Ask AI assistant identifier
 
 # Optional overrides if your Ask AI integration uses a dedicated application or index
@@ -58,4 +60,4 @@ ALGOLIA_ASSISTANT_ID="..."     # Algolia Ask AI assistant identifier
 # ALGOLIA_AI_INDEX_NAME="..."
 ```
 
-Only set the Ask AI variables when your DocSearch application is configured for the experience; otherwise they can be left unset. Without the variables, the site keeps using the bundled local documentation search.
+Only set the Ask AI variables when your DocSearch application is configured for the experience; otherwise they can be left unset. Without the variables, the site keeps using the bundled local documentation search (or Algolia, if those credentials are provided) without attempting to activate Ask AI.
