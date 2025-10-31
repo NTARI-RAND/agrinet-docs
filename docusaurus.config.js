@@ -60,7 +60,7 @@ const hasAskAiCredentials = Boolean(
 const config = {
   title: "Agrinet Protocol",
   tagline: "Fruitful App & Agrinet Engine",
-  favicon: "img/favicon.ico",
+  favicon: "img/agrinet_favicon.ico",
 
   // Add the Leaflet CSS via CDN so pages that render maps (react-leaflet + leaflet)
   // get the stylesheet without importing 'leaflet/dist/leaflet.css' from JS.
