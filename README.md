@@ -60,4 +60,4 @@ ALGOLIA_ASSISTANT_ID="..."     # Algolia Ask AI assistant identifier
 # ALGOLIA_AI_INDEX_NAME="..."
 ```
 
-Only set the Ask AI variables when your DocSearch application is configured for the experience; otherwise they can be left unset. Without the variables, the site keeps using the bundled local documentation search (or Algolia, if those credentials are provided) without attempting to activate Ask AI.
+Only set the Ask AI variables when your DocSearch application is configured for the experience; otherwise they can be left unset. Without the variables, the site keeps using the bundled local documentation search (or Algolia, if those credentials are provided) without attempting to activate Ask AI. When both the Algolia credentials and an Ask AI assistant are present, the configuration automatically wires the assistant into DocSearch so the modal can surface the conversational panel just like the React.dev experience. Leaving the Ask AI fields empty while still providing Algolia credentials yields the traditional DocSearch-only UI.

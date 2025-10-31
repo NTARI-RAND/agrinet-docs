@@ -188,6 +188,36 @@ const translations = {
         message: "Copy",
         description: "The title for copy button",
       }),
+      likeButtonTitle: translate({
+        id: "theme.SearchModal.askAiScreen.likeButtonTitle",
+        message: "Like",
+        description: "The title for the like feedback button",
+      }),
+      dislikeButtonTitle: translate({
+        id: "theme.SearchModal.askAiScreen.dislikeButtonTitle",
+        message: "Dislike",
+        description: "The title for the dislike feedback button",
+      }),
+      thanksForFeedbackText: translate({
+        id: "theme.SearchModal.askAiScreen.thanksForFeedbackText",
+        message: "Thanks for your feedback!",
+        description: "The acknowledgement text after providing feedback",
+      }),
+      preToolCallText: translate({
+        id: "theme.SearchModal.askAiScreen.preToolCallText",
+        message: "Searching...",
+        description: "The text displayed before Ask AI fetches supporting sources",
+      }),
+      duringToolCallText: translate({
+        id: "theme.SearchModal.askAiScreen.duringToolCallText",
+        message: "Searching for ",
+        description: "The text displayed while Ask AI fetches supporting sources",
+      }),
+      afterToolCallText: translate({
+        id: "theme.SearchModal.askAiScreen.afterToolCallText",
+        message: "Searched for",
+        description: "The text displayed after Ask AI fetches supporting sources",
+      }),
       newAnswerButtonText: translate({
         id: "theme.SearchModal.askAiScreen.newAnswerButtonText",
         message: "New answer",
@@ -209,7 +239,91 @@ const translations = {
         description: "The ARIA label for ask another question button",
       }),
     },
+    footer: {
+      selectText: translate({
+        id: "theme.SearchModal.footer.selectText",
+        message: "Select",
+        description: "The select text for footer",
+      }),
+      submitQuestionText: translate({
+        id: "theme.SearchModal.footer.submitQuestionText",
+        message: "Submit question",
+        description: "The submit question text for footer",
+      }),
+      selectKeyAriaLabel: translate({
+        id: "theme.SearchModal.footer.selectKeyAriaLabel",
+        message: "Enter key",
+        description: "The ARIA label for select key in footer",
+      }),
+      navigateText: translate({
+        id: "theme.SearchModal.footer.navigateText",
+        message: "Navigate",
+        description: "The navigate text for footer",
+      }),
+      navigateUpKeyAriaLabel: translate({
+        id: "theme.SearchModal.footer.navigateUpKeyAriaLabel",
+        message: "Arrow up",
+        description: "The ARIA label for navigate up key in footer",
+      }),
+      navigateDownKeyAriaLabel: translate({
+        id: "theme.SearchModal.footer.navigateDownKeyAriaLabel",
+        message: "Arrow down",
+        description: "The ARIA label for navigate down key in footer",
+      }),
+      closeText: translate({
+        id: "theme.SearchModal.footer.closeText",
+        message: "Close",
+        description: "The close text for footer",
+      }),
+      closeKeyAriaLabel: translate({
+        id: "theme.SearchModal.footer.closeKeyAriaLabel",
+        message: "Escape key",
+        description: "The ARIA label for close key in footer",
+      }),
+      poweredByText: translate({
+        id: "theme.SearchModal.footer.searchByText",
+        message: "Powered by",
+        description: "The 'Powered by' text for footer",
+      }),
+      searchByText: translate({
+        id: "theme.SearchModal.footer.searchByText",
+        message: "Powered by",
+        description: "The 'Powered by' text for footer",
+      }),
+      backToSearchText: translate({
+        id: "theme.SearchModal.footer.backToSearchText",
+        message: "Back to search",
+        description: "The back to search text for footer",
+      }),
+    },
+    noResultsScreen: {
+      noResultsText: translate({
+        id: "theme.SearchModal.noResultsScreen.noResultsText",
+        message: "No results found for",
+        description: "The text when there are no results",
+      }),
+      suggestedQueryText: translate({
+        id: "theme.SearchModal.noResultsScreen.suggestedQueryText",
+        message: "Try searching for",
+        description: "The text for suggested query",
+      }),
+      reportMissingResultsText: translate({
+        id: "theme.SearchModal.noResultsScreen.reportMissingResultsText",
+        message: "Believe this query should return results?",
+        description: "The text for reporting missing results",
+      }),
+      reportMissingResultsLinkText: translate({
+        id: "theme.SearchModal.noResultsScreen.reportMissingResultsLinkText",
+        message: "Let us know.",
+        description: "The link text for reporting missing results",
+      }),
+    },
   },
+  placeholder: translate({
+    id: "theme.SearchModal.placeholder",
+    message: "Search docs",
+    description: "The placeholder of the input of the DocSearch pop-up modal",
+  }),
 };
 
 export default translations;

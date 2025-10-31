@@ -47,6 +47,15 @@ const hasAskAiCredentials = Boolean(
   assistantId && askAiAppId && askAiApiKey && askAiIndexName,
 );
 
+const askAiConfig = hasAskAiCredentials
+  ? {
+      assistantId,
+      appId: askAiAppId,
+      apiKey: askAiApiKey,
+      indexName: askAiIndexName,
+    }
+  : null;
+
 const algoliaConfig = hasAlgoliaCredentials
   ? {
       appId: algoliaAppId,
@@ -54,15 +63,7 @@ const algoliaConfig = hasAlgoliaCredentials
       indexName: algoliaIndexName,
       contextualSearch: true,
       searchPagePath: "search",
-    }
-  : null;
-
-const askAiConfig = hasAskAiCredentials
-  ? {
-      assistantId,
-      appId: askAiAppId,
-      apiKey: askAiApiKey,
-      indexName: askAiIndexName,
+      ...(askAiConfig ? { askAi: askAiConfig } : {}),
     }
   : null;
 
@@ -160,7 +161,6 @@ const config = {
         respectPrefersColorScheme: true,
       },
       ...(algoliaConfig ? { algolia: algoliaConfig } : {}),
-      ...(askAiConfig ? { askAi: askAiConfig } : {}),
       navbar: {
         title: "v1.0",
         logo: { alt: "Agrinet Logo", src: "img/agrinet.png" },
