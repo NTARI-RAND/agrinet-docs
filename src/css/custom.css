@@ -45,3 +45,8 @@
   display: inline-flex;
   align-items: center;
 }
+
+/* Ensure navbar dropdown menus appear above interactive map layers */
+.navbar__item.dropdown .dropdown__menu {
+  z-index: 2000;
+}
