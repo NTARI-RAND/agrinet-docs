@@ -27,7 +27,10 @@ const locales = [
 ];
 
 const localeConfigs = Object.fromEntries(
-  locales.map(({ code, label, htmlLang }) => [code, { label, ...(htmlLang ? { htmlLang } : {}) }]),
+  locales.map(({ code, label, htmlLang }) => [
+    code,
+    { label, ...(htmlLang ? { htmlLang } : {}) },
+  ])
 );
 
 const algoliaAppId = ALGOLIA_APP_ID?.trim();
@@ -35,7 +38,7 @@ const algoliaApiKey = ALGOLIA_API_KEY?.trim();
 const algoliaIndexName = ALGOLIA_INDEX_NAME?.trim();
 
 const hasAlgoliaCredentials = Boolean(
-  algoliaAppId && algoliaApiKey && algoliaIndexName,
+  algoliaAppId && algoliaApiKey && algoliaIndexName
 );
 
 const assistantId = ALGOLIA_ASSISTANT_ID?.trim();
@@ -44,7 +47,7 @@ const askAiApiKey = ALGOLIA_AI_API_KEY?.trim() || algoliaApiKey;
 const askAiIndexName = ALGOLIA_AI_INDEX_NAME?.trim() || algoliaIndexName;
 
 const hasAskAiCredentials = Boolean(
-  assistantId && askAiAppId && askAiApiKey && askAiIndexName,
+  assistantId && askAiAppId && askAiApiKey && askAiIndexName
 );
 
 const askAiConfig = hasAskAiCredentials
@@ -93,7 +96,7 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: "https://your-docusaurus-site.example.com",
+  url: "http://theagri.net/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often "/<projectName>/"
   baseUrl: "/",
