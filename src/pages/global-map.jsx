@@ -85,7 +85,7 @@ const buildEndpoint = (baseUrl, path) => {
   return `${trimmed}${path}`;
 };
 
-function GlobalMapContent({ MapContainer, TileLayer, GeoJSON, L }) {
+function GlobalMapContent() {
   const [geoJsonData, setGeoJsonData] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [isUsingFallback, setIsUsingFallback] = useState(false);
@@ -234,48 +234,65 @@ function GlobalMapContent({ MapContainer, TileLayer, GeoJSON, L }) {
       )}
 
       <div style={{ height: 600, borderRadius: 6, overflow: "hidden" }}>
-        <MapContainer
-          center={[0, 0]}
-          zoom={2}
-          style={{ height: "100%", width: "100%" }}
-          whenCreated={(mapInstance) => {
-            mapRef.current = mapInstance;
-          }}
+        <BrowserOnly
+          fallback={
+            <div style={{ padding: 16 }}>
+              <p>Loading map…</p>
+            </div>
+          }
         >
-          <BrowserOnly fallback={<div style={{ padding: 16 }}>Loading map…</div>}>
-            {() => {
-              const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
+          {() => {
+            const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
+            // eslint-disable-next-line global-require
+            const L = require("leaflet");
 
-          {geoJsonData && (
-            <GeoJSON
-              data={geoJsonData}
-              pointToLayer={(feature, latlng) => {
-                const isOnline = feature?.properties?._isOnline;
-                const color = isOnline ? "#2b87ff" : "#7a7a7a";
+            return (
+              <MapContainer
+                center={[0, 0]}
+                zoom={2}
+                style={{ height: "100%", width: "100%" }}
+                whenCreated={(mapInstance) => {
+                  mapRef.current = mapInstance;
+                }}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution="&copy; OpenStreetMap contributors"
+                />
 
-                return L.circleMarker(latlng, {
-                  radius: 8,
-                  color,
-                  fillColor: color,
-                  weight: 2,
-                  fillOpacity: isOnline ? 0.8 : 0.35,
-                });
-              }}
-              onEachFeature={(feature, layer) => {
-                const p = feature.properties || {};
-                const popupContent = buildPopupContent({
-                  ...p,
-                  last_seen:
-                    p.last_seen && !Number.isNaN(new Date(p.last_seen))
-                      ? new Date(p.last_seen).toLocaleString()
-                      : "—",
-                });
+                {geoJsonData && (
+                  <GeoJSON
+                    data={geoJsonData}
+                    pointToLayer={(feature, latlng) => {
+                      const isOnline = feature?.properties?._isOnline;
+                      const color = isOnline ? "#2b87ff" : "#7a7a7a";
 
-                layer.bindPopup(popupContent);
-              }}
-            />
-          )}
-        </MapContainer>
+                      return L.circleMarker(latlng, {
+                        radius: 8,
+                        color,
+                        fillColor: color,
+                        weight: 2,
+                        fillOpacity: isOnline ? 0.8 : 0.35,
+                      });
+                    }}
+                    onEachFeature={(feature, layer) => {
+                      const p = feature.properties || {};
+                      const popupContent = buildPopupContent({
+                        ...p,
+                        last_seen:
+                          p.last_seen && !Number.isNaN(new Date(p.last_seen))
+                            ? new Date(p.last_seen).toLocaleString()
+                            : "—",
+                      });
+
+                      layer.bindPopup(popupContent);
+                    }}
+                  />
+                )}
+              </MapContainer>
+            );
+          }}
+        </BrowserOnly>
       </div>
 
       <p style={{ marginTop: 12 }}>
@@ -293,28 +310,5 @@ function GlobalMapContent({ MapContainer, TileLayer, GeoJSON, L }) {
 }
 
 export default function GlobalMap() {
-  return (
-    <BrowserOnly
-      fallback={
-        <div style={{ padding: 16 }}>
-          <h1>Agrinet Global Map</h1>
-          <p>Loading map…</p>
-        </div>
-      }
-    >
-      {() => {
-        const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
-        // eslint-disable-next-line global-require
-        const L = require("leaflet");
-        return (
-          <GlobalMapContent
-            MapContainer={MapContainer}
-            TileLayer={TileLayer}
-            GeoJSON={GeoJSON}
-            L={L}
-          />
-        );
-      }}
-    </BrowserOnly>
-  );
+  return <GlobalMapContent />;
 }
