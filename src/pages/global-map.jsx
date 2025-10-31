@@ -187,9 +187,9 @@ function GlobalMapContent({ MapContainer, TileLayer, GeoJSON, L }) {
   }, [nodesEndpoint]);
 
   useEffect(() => {
-    if (geoJsonData && mapRef.current) {
+    if (leaflet && geoJsonData && mapRef.current) {
       try {
-        const bounds = L.geoJSON(geoJsonData).getBounds();
+        const bounds = leaflet.geoJSON(geoJsonData).getBounds();
         if (
           bounds && typeof bounds.isValid === "function"
             ? bounds.isValid()
@@ -201,7 +201,7 @@ function GlobalMapContent({ MapContainer, TileLayer, GeoJSON, L }) {
         console.warn("Could not fit bounds:", error);
       }
     }
-  }, [geoJsonData]);
+  }, [leaflet, geoJsonData]);
 
   const displayEndpoint = nodesEndpoint || "/api/nodes";
 
@@ -242,10 +242,9 @@ function GlobalMapContent({ MapContainer, TileLayer, GeoJSON, L }) {
             mapRef.current = mapInstance;
           }}
         >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="&copy; OpenStreetMap contributors"
-          />
+          <BrowserOnly fallback={<div style={{ padding: 16 }}>Loading map…</div>}>
+            {() => {
+              const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
 
           {geoJsonData && (
             <GeoJSON
