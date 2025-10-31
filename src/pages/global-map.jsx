@@ -65,7 +65,10 @@ export default function GlobalMap() {
           download the file below.
         </p>
 
-        <div style={{ height: 600, borderRadius: 6, overflow: "hidden" }}>
+        <div
+          className="globalMap__mapWrapper"
+          style={{ height: 600, borderRadius: 6, overflow: "hidden" }}
+        >
           <BrowserOnly fallback={<div style={{ padding: 16 }}>Loading map…</div>}>
             {() => {
               const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
