@@ -114,6 +114,13 @@ heartbeats, deletions, and rate-limit violations). Each log line includes a
 timestamp, log level, message, and contextual metadata so you can forward the
 output directly to your log aggregation pipeline.
 
+For lightweight monitoring without a full metrics stack, the registry exposes a
+`GET /api/metrics` endpoint. The response includes cumulative counters for
+registrations, heartbeats, deletions, and rate-limit denials, alongside derived
+node counts (total/online/offline) and the configured rate-limit window. Poll
+this endpoint from your observability platform or feed it into Prometheus via a
+custom collector.
+
 ### Continuous integration
 
 GitHub Actions runs the registry smoke tests on every pull request and on

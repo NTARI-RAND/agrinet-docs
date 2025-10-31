@@ -61,6 +61,22 @@ let nodes = new Map();
 const sseClients = new Set();
 const sseKeepAliveTimers = new Map();
 
+const metrics = {
+  counters: {
+    registrations_total: 0,
+    heartbeats_total: 0,
+    deletions_total: 0,
+    rate_limit_blocked_total: 0,
+  },
+  timestamps: {
+    last_registration_at: null,
+    last_heartbeat_at: null,
+    last_deletion_at: null,
+    last_rate_limit_blocked_at: null,
+  },
+};
+const serverStartTime = Date.now();
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
 const ID_PATTERN = /^[a-zA-Z0-9._-]+$/;
 const MAX_STRING_LENGTH = 240;
@@ -78,6 +94,61 @@ const KEEPALIVE_INTERVAL_MS = 30_000;
 let writeLock = Promise.resolve();
 
 const writeRateLimiters = new Map();
+
+function markMetric(counterKey, timestampKey) {
+  if (counterKey) {
+    const current = metrics.counters[counterKey] || 0;
+    metrics.counters[counterKey] = current + 1;
+  }
+  if (timestampKey) {
+    metrics.timestamps[timestampKey] = new Date().toISOString();
+  }
+}
+
+const recordRegistration = () =>
+  markMetric("registrations_total", "last_registration_at");
+const recordHeartbeat = () => markMetric("heartbeats_total", "last_heartbeat_at");
+const recordDeletion = () => markMetric("deletions_total", "last_deletion_at");
+const recordRateLimitBlock = () =>
+  markMetric("rate_limit_blocked_total", "last_rate_limit_blocked_at");
+
+function computeNodeStatusCounts() {
+  let online = 0;
+  const now = Date.now();
+  for (const feature of nodes.values()) {
+    const lastSeen = feature.properties.last_seen
+      ? Date.parse(feature.properties.last_seen)
+      : undefined;
+    if (
+      typeof lastSeen === "number" &&
+      !Number.isNaN(lastSeen) &&
+      now - lastSeen <= ONLINE_THRESHOLD_MS
+    ) {
+      online += 1;
+    }
+  }
+
+  const total = nodes.size;
+  return {
+    total,
+    online,
+    offline: Math.max(total - online, 0),
+  };
+}
+
+function snapshotMetrics() {
+  const counts = computeNodeStatusCounts();
+  return {
+    ...metrics.counters,
+    ...metrics.timestamps,
+    nodes_total: counts.total,
+    nodes_online: counts.online,
+    nodes_offline: counts.offline,
+    rate_limit_window_ms: RATE_LIMIT_WINDOW_MS,
+    rate_limit_max_writes: RATE_LIMIT_MAX_WRITES,
+    uptime_seconds: Math.floor((Date.now() - serverStartTime) / 1000),
+  };
+}
 
 function logEvent(level, message, context = undefined) {
   const base = {
@@ -254,6 +325,7 @@ function enforceWriteRateLimit(req, res) {
       1,
       Math.ceil((entry.resetTime - now) / 1000)
     );
+    recordRateLimitBlock();
     logWarn("Write rate limit triggered", {
       key,
       maxWrites: RATE_LIMIT_MAX_WRITES,
@@ -814,6 +886,11 @@ async function handleRequest(req, res) {
     return;
   }
 
+  if (method === "GET" && url.pathname === "/api/metrics") {
+    sendJson(req, res, 200, snapshotMetrics(), {}, READ_ORIGINS);
+    return;
+  }
+
   if (method === "GET" && url.pathname === "/api/nodes/stream") {
     const originHeader = resolveAllowedOrigin(req.headers.origin, READ_ORIGINS);
     const headers = {
@@ -870,6 +947,7 @@ async function handleRequest(req, res) {
         return;
       }
       sendJson(req, res, 204, {}, {}, WRITE_ORIGINS);
+      recordDeletion();
       logInfo("Deleted node", {
         nodeId: id,
         remoteAddress: req.socket && req.socket.remoteAddress,
@@ -997,6 +1075,7 @@ async function handleRequest(req, res) {
         {},
         WRITE_ORIGINS
       );
+      recordHeartbeat();
       logInfo("Recorded heartbeat", {
         nodeId: id,
         remoteAddress: req.socket && req.socket.remoteAddress,
@@ -1070,6 +1149,7 @@ async function handleRequest(req, res) {
         },
         WRITE_ORIGINS
       );
+      recordRegistration();
       logInfo("Registered node", {
         nodeId: result.feature.properties.id,
         remoteAddress: req.socket && req.socket.remoteAddress,

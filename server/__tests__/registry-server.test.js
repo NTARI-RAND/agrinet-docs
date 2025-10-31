@@ -141,6 +141,15 @@ async function getJson(url) {
   return { response, json };
 }
 
+async function deleteRequest(url, token) {
+  return fetch(url, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 const WRITE_TOKEN = "test-write-token";
 
 test("registry server safeguards", async (t) => {
@@ -247,6 +256,11 @@ test("registry server safeguards", async (t) => {
       assert.ok(thirdPing.headers.get("retry-after"));
       const errorBody = await thirdPing.json();
       assert.match(errorBody.error, /Too many write requests/);
+
+      const { json: metrics } = await getJson(
+        `${context.baseUrl}/api/metrics`
+      );
+      assert.ok(metrics.rate_limit_blocked_total >= 1);
     } finally {
       await context.cleanup();
     }
@@ -375,6 +389,83 @@ test("registry server safeguards", async (t) => {
       assert.strictEqual(forbiddenResponse.status, 400);
       const body = await forbiddenResponse.json();
       assert.match(body.error, /may not be modified/i);
+    } finally {
+      await context.cleanup();
+    }
+  });
+
+  await t.test("exposes registry metrics", async () => {
+    const context = await startRegistryProcess({ port: allocatePort() });
+
+    try {
+      const metricsBefore = await getJson(
+        `${context.baseUrl}/api/metrics`
+      );
+      assert.strictEqual(metricsBefore.response.status, 200);
+      assert.strictEqual(metricsBefore.json.registrations_total, 0);
+      assert.strictEqual(metricsBefore.json.nodes_total, 0);
+
+      const createResponse = await postJson(
+        `${context.baseUrl}/api/nodes`,
+        {
+          type: "Feature",
+          properties: {
+            node_name: "Metrics Node",
+            contact_email: "ops@example.org",
+            node_type: "Service",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [10, 10],
+          },
+        },
+        WRITE_TOKEN
+      );
+      assert.strictEqual(createResponse.status, 201);
+      const createdBody = await createResponse.json();
+      const nodeId = createdBody.properties.id;
+
+      const metricsAfterCreate = await getJson(
+        `${context.baseUrl}/api/metrics`
+      );
+      assert.strictEqual(metricsAfterCreate.json.registrations_total, 1);
+      assert.strictEqual(metricsAfterCreate.json.nodes_total, 1);
+      assert.ok(
+        metricsAfterCreate.json.last_registration_at,
+        "last_registration_at should be recorded"
+      );
+
+      const heartbeatResponse = await putJson(
+        `${context.baseUrl}/api/nodes/${nodeId}/ping`,
+        { last_seen: new Date().toISOString() },
+        WRITE_TOKEN
+      );
+      assert.strictEqual(heartbeatResponse.status, 200);
+
+      const metricsAfterHeartbeat = await getJson(
+        `${context.baseUrl}/api/metrics`
+      );
+      assert.strictEqual(metricsAfterHeartbeat.json.heartbeats_total, 1);
+      assert.ok(metricsAfterHeartbeat.json.last_heartbeat_at);
+      assert.strictEqual(metricsAfterHeartbeat.json.nodes_total, 1);
+
+      const deleteResponse = await deleteRequest(
+        `${context.baseUrl}/api/nodes/${nodeId}`,
+        WRITE_TOKEN
+      );
+      assert.strictEqual(deleteResponse.status, 204);
+
+      const metricsAfterDelete = await getJson(
+        `${context.baseUrl}/api/metrics`
+      );
+      assert.strictEqual(metricsAfterDelete.json.deletions_total, 1);
+      assert.ok(metricsAfterDelete.json.last_deletion_at);
+      assert.strictEqual(metricsAfterDelete.json.nodes_total, 0);
+      assert.strictEqual(
+        metricsAfterDelete.json.nodes_offline,
+        0,
+        "no offline nodes after deletion"
+      );
     } finally {
       await context.cleanup();
     }
