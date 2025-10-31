@@ -45,3 +45,22 @@
   display: inline-flex;
   align-items: center;
 }
+
+/* Ensure navbar dropdown menus appear above interactive map layers */
+.navbar {
+  z-index: 2100;
+}
+
+.navbar__item.dropdown .dropdown__menu {
+  z-index: 2200;
+}
+
+.globalMap__mapWrapper {
+  position: relative;
+  z-index: 0;
+}
+
+.globalMap__mapWrapper .leaflet-container {
+  position: relative;
+  z-index: 0;
+}
