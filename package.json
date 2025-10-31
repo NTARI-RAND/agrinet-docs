@@ -12,7 +12,9 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "dev": "docusaurus start"
+    "dev": "docusaurus start",
+    "registry": "node server/registry-server.js",
+    "test": "node --test"
   },
   "dependencies": {
     "@docusaurus/core": "3.9.2",
