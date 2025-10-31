@@ -25,6 +25,7 @@ const sidebars = {
     "onboarding",
     "federation-guide",
     "api-testing",
+    "chat-ui",
     {
       type: "category",
       label: "Tutorial",
