@@ -90,6 +90,7 @@ function GlobalMapContent() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isUsingFallback, setIsUsingFallback] = useState(false);
   const mapRef = useRef(null);
+  const leafletRef = useRef(null);
 
   const registryBaseUrl =
     typeof process !== "undefined" && process.env.AGRINET_REGISTRY_URL
@@ -187,9 +188,9 @@ function GlobalMapContent() {
   }, [nodesEndpoint]);
 
   useEffect(() => {
-    if (leaflet && geoJsonData && mapRef.current) {
+    if (geoJsonData && mapRef.current && leafletRef.current) {
       try {
-        const bounds = leaflet.geoJSON(geoJsonData).getBounds();
+        const bounds = leafletRef.current.geoJSON(geoJsonData).getBounds();
         if (
           bounds && typeof bounds.isValid === "function"
             ? bounds.isValid()
@@ -245,6 +246,10 @@ function GlobalMapContent() {
             const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
             // eslint-disable-next-line global-require
             const L = require("leaflet");
+
+            if (!leafletRef.current) {
+              leafletRef.current = L;
+            }
 
             return (
               <MapContainer
