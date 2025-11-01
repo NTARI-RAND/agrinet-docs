@@ -353,14 +353,10 @@ function GlobalMapContent() {
   );
 }
 
-export default function GlobalMap() {
-  return (
-    <BrowserOnly fallback={<GlobalMapFallback />}>
-      {() => <GlobalMapContent />}
-    </BrowserOnly>
-  );
-}
+const GlobalMap = () => (
+  <BrowserOnly fallback={<GlobalMapFallback />}>
+    {() => <GlobalMapContent />}
+  </BrowserOnly>
+);
 
-export default function GlobalMap() {
-  return <GlobalMapContent />;
-}
+export default GlobalMap;
