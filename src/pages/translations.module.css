@@ -1,5 +1,9 @@
 .hero {
-  background: linear-gradient(135deg, rgba(139, 195, 74, 0.12), rgba(139, 195, 74, 0.32));
+  background: linear-gradient(
+    135deg,
+    rgba(var(--ifm-color-primary-rgb), 0.12),
+    rgba(var(--ifm-color-primary-rgb), 0.32)
+  );
   padding: 4rem 0;
   text-align: center;
 }
