@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 // Leaflet CSS is loaded from docusaurus.config.js stylesheets, so we do not import it here.
 
@@ -23,59 +29,6 @@ const isSafeHttpUrl = (value) => {
   return null;
 };
 
-const createInfoRow = (label, value) => {
-  const row = document.createElement("div");
-  const strong = document.createElement("strong");
-  strong.textContent = `${label}:`;
-  row.appendChild(strong);
-  row.appendChild(document.createTextNode(` ${value}`));
-  return row;
-};
-
-const buildPopupContent = (properties) => {
-  const container = document.createElement("div");
-  const title = document.createElement("strong");
-  title.textContent = properties.node_name || "Unknown node";
-  container.appendChild(title);
-
-  container.appendChild(document.createElement("br"));
-
-  container.appendChild(
-    createInfoRow("Status", properties._isOnline ? "Online" : "Offline")
-  );
-  container.appendChild(
-    createInfoRow("Last seen", properties.last_seen || "—")
-  );
-  container.appendChild(createInfoRow("Type", properties.node_type || "—"));
-  container.appendChild(
-    createInfoRow("Email", properties.contact_email || "—")
-  );
-
-  const languages = Array.isArray(properties.languages)
-    ? properties.languages.join(", ") || "—"
-    : "—";
-  container.appendChild(createInfoRow("Languages", languages));
-
-  const categories = Array.isArray(properties.ping_categories)
-    ? properties.ping_categories.join(", ") || "—"
-    : "—";
-  container.appendChild(createInfoRow("Categories", categories));
-
-  const safeForkUrl = isSafeHttpUrl(properties.fork_repo);
-  if (safeForkUrl) {
-    const linkRow = document.createElement("div");
-    const anchor = document.createElement("a");
-    anchor.href = safeForkUrl;
-    anchor.target = "_blank";
-    anchor.rel = "noopener noreferrer";
-    anchor.textContent = "Fork repo";
-    linkRow.appendChild(anchor);
-    container.appendChild(linkRow);
-  }
-
-  return container;
-};
-
 const buildEndpoint = (baseUrl, path) => {
   if (!baseUrl) {
     return path;
@@ -85,6 +38,87 @@ const buildEndpoint = (baseUrl, path) => {
   return `${trimmed}${path}`;
 };
 
+const resolveRegistryBaseUrl = () =>
+  typeof process !== "undefined" && process.env.AGRINET_REGISTRY_URL
+    ? process.env.AGRINET_REGISTRY_URL
+    : "";
+
+function MapShell({
+  children,
+  displayEndpoint,
+  errorMessage,
+  isUsingFallback,
+}) {
+  return (
+    <div style={{ padding: 16 }}>
+      <h1>Agrinet Global Map</h1>
+      <p>
+        The map polls <code>{displayEndpoint}</code> every 30 seconds to keep
+        node locations and status up to date. Set the
+        <code>AGRINET_REGISTRY_URL</code> environment variable when building the
+        docs if your registry is hosted on another domain. If the registry
+        cannot be reached, the map falls back to the last published static
+        dataset.
+      </p>
+
+      {errorMessage && (
+        <div
+          role="status"
+          style={{
+            background: "#fff3cd",
+            border: "1px solid #ffeeba",
+            color: "#856404",
+            borderRadius: 6,
+            padding: "12px 16px",
+            marginBottom: 16,
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
+
+      <div style={{ height: 600, borderRadius: 6, overflow: "hidden" }}>
+        {children}
+      </div>
+
+      <p style={{ marginTop: 12 }}>
+        <a href="/data/global_map_layer.geojson" download>
+          Download the latest published GeoJSON snapshot
+        </a>
+        {isUsingFallback && !errorMessage && (
+          <span style={{ marginLeft: 8 }}>
+            (Currently displaying the fallback dataset.)
+          </span>
+        )}
+      </p>
+    </div>
+  );
+}
+
+function GlobalMapFallback() {
+  const registryBaseUrl = resolveRegistryBaseUrl();
+  const displayEndpoint =
+    buildEndpoint(registryBaseUrl, "/api/nodes") || "/api/nodes";
+
+  return (
+    <MapShell displayEndpoint={displayEndpoint} errorMessage={null} isUsingFallback={false}>
+      <div
+        style={{
+          alignItems: "center",
+          background: "#f8f9fa",
+          color: "#495057",
+          display: "flex",
+          fontWeight: 500,
+          height: "100%",
+          justifyContent: "center",
+        }}
+      >
+        Loading map…
+      </div>
+    </MapShell>
+  );
+}
+
 function GlobalMapContent() {
   const [geoJsonData, setGeoJsonData] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -92,15 +126,77 @@ function GlobalMapContent() {
   const mapRef = useRef(null);
   const leafletRef = useRef(null);
 
-  const registryBaseUrl =
-    typeof process !== "undefined" && process.env.AGRINET_REGISTRY_URL
-      ? process.env.AGRINET_REGISTRY_URL
-      : "";
-
+  const registryBaseUrl = resolveRegistryBaseUrl();
   const nodesEndpoint = useMemo(
     () => buildEndpoint(registryBaseUrl, "/api/nodes"),
     [registryBaseUrl]
   );
+  const displayEndpoint = nodesEndpoint || "/api/nodes";
+
+  const L = useMemo(() => {
+    // eslint-disable-next-line global-require
+    return require("leaflet");
+  }, []);
+
+  const leafletComponents = useMemo(() => {
+    // eslint-disable-next-line global-require
+    return require("react-leaflet");
+  }, []);
+
+  const { MapContainer, TileLayer, GeoJSON } = leafletComponents;
+
+  const buildPopupContent = useCallback((properties) => {
+    const createInfoRow = (label, value) => {
+      const row = document.createElement("div");
+      const strong = document.createElement("strong");
+      strong.textContent = `${label}:`;
+      row.appendChild(strong);
+      row.appendChild(document.createTextNode(` ${value}`));
+      return row;
+    };
+
+    const container = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = properties.node_name || "Unknown node";
+    container.appendChild(title);
+
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(
+      createInfoRow("Status", properties._isOnline ? "Online" : "Offline")
+    );
+    container.appendChild(
+      createInfoRow("Last seen", properties.last_seen || "—")
+    );
+    container.appendChild(createInfoRow("Type", properties.node_type || "—"));
+    container.appendChild(
+      createInfoRow("Email", properties.contact_email || "—")
+    );
+
+    const languages = Array.isArray(properties.languages)
+      ? properties.languages.join(", ") || "—"
+      : "—";
+    container.appendChild(createInfoRow("Languages", languages));
+
+    const categories = Array.isArray(properties.ping_categories)
+      ? properties.ping_categories.join(", ") || "—"
+      : "—";
+    container.appendChild(createInfoRow("Categories", categories));
+
+    const safeForkUrl = isSafeHttpUrl(properties.fork_repo);
+    if (safeForkUrl) {
+      const linkRow = document.createElement("div");
+      const anchor = document.createElement("a");
+      anchor.href = safeForkUrl;
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+      anchor.textContent = "Fork repo";
+      linkRow.appendChild(anchor);
+      container.appendChild(linkRow);
+    }
+
+    return container;
+  }, []);
 
   useEffect(() => {
     let isActive = true;
@@ -202,115 +298,66 @@ function GlobalMapContent() {
         console.warn("Could not fit bounds:", error);
       }
     }
-  }, [leaflet, geoJsonData]);
-
-  const displayEndpoint = nodesEndpoint || "/api/nodes";
+  }, [geoJsonData, L]);
 
   return (
-    <div style={{ padding: 16 }}>
-      <h1>Agrinet Global Map</h1>
-      <p>
-        The map polls <code>{displayEndpoint}</code> every 30 seconds to keep
-        node locations and status up to date. Set the
-        <code>AGRINET_REGISTRY_URL</code> environment variable when building the
-        docs if your registry is hosted on another domain. If the registry
-        cannot be reached, the map falls back to the last published static
-        dataset.
-      </p>
+    <MapShell
+      displayEndpoint={displayEndpoint}
+      errorMessage={errorMessage}
+      isUsingFallback={isUsingFallback}
+    >
+      <MapContainer
+        center={[0, 0]}
+        zoom={2}
+        style={{ height: "100%", width: "100%" }}
+        whenCreated={(mapInstance) => {
+          mapRef.current = mapInstance;
+        }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="&copy; OpenStreetMap contributors"
+        />
 
-      {errorMessage && (
-        <div
-          role="status"
-          style={{
-            background: "#fff3cd",
-            border: "1px solid #ffeeba",
-            color: "#856404",
-            borderRadius: 6,
-            padding: "12px 16px",
-            marginBottom: 16,
-          }}
-        >
-          {errorMessage}
-        </div>
-      )}
+        {geoJsonData && (
+          <GeoJSON
+            data={geoJsonData}
+            pointToLayer={(feature, latlng) => {
+              const isOnline = feature?.properties?._isOnline;
+              const color = isOnline ? "#2b87ff" : "#7a7a7a";
 
-      <div style={{ height: 600, borderRadius: 6, overflow: "hidden" }}>
-        <BrowserOnly
-          fallback={
-            <div style={{ padding: 16 }}>
-              <p>Loading map…</p>
-            </div>
-          }
-        >
-          {() => {
-            const { MapContainer, TileLayer, GeoJSON } = require("react-leaflet");
-            // eslint-disable-next-line global-require
-            const L = require("leaflet");
+              return L.circleMarker(latlng, {
+                radius: 8,
+                color,
+                fillColor: color,
+                weight: 2,
+                fillOpacity: isOnline ? 0.8 : 0.35,
+              });
+            }}
+            onEachFeature={(feature, layer) => {
+              const p = feature.properties || {};
+              const popupContent = buildPopupContent({
+                ...p,
+                last_seen:
+                  p.last_seen && !Number.isNaN(new Date(p.last_seen))
+                    ? new Date(p.last_seen).toLocaleString()
+                    : "—",
+              });
 
-            if (!leafletRef.current) {
-              leafletRef.current = L;
-            }
-
-            return (
-              <MapContainer
-                center={[0, 0]}
-                zoom={2}
-                style={{ height: "100%", width: "100%" }}
-                whenCreated={(mapInstance) => {
-                  mapRef.current = mapInstance;
-                }}
-              >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution="&copy; OpenStreetMap contributors"
-                />
-
-                {geoJsonData && (
-                  <GeoJSON
-                    data={geoJsonData}
-                    pointToLayer={(feature, latlng) => {
-                      const isOnline = feature?.properties?._isOnline;
-                      const color = isOnline ? "#2b87ff" : "#7a7a7a";
-
-                      return L.circleMarker(latlng, {
-                        radius: 8,
-                        color,
-                        fillColor: color,
-                        weight: 2,
-                        fillOpacity: isOnline ? 0.8 : 0.35,
-                      });
-                    }}
-                    onEachFeature={(feature, layer) => {
-                      const p = feature.properties || {};
-                      const popupContent = buildPopupContent({
-                        ...p,
-                        last_seen:
-                          p.last_seen && !Number.isNaN(new Date(p.last_seen))
-                            ? new Date(p.last_seen).toLocaleString()
-                            : "—",
-                      });
-
-                      layer.bindPopup(popupContent);
-                    }}
-                  />
-                )}
-              </MapContainer>
-            );
-          }}
-        </BrowserOnly>
-      </div>
-
-      <p style={{ marginTop: 12 }}>
-        <a href="/data/global_map_layer.geojson" download>
-          Download the latest published GeoJSON snapshot
-        </a>
-        {isUsingFallback && !errorMessage && (
-          <span style={{ marginLeft: 8 }}>
-            (Currently displaying the fallback dataset.)
-          </span>
+              layer.bindPopup(popupContent);
+            }}
+          />
         )}
-      </p>
-    </div>
+      </MapContainer>
+    </MapShell>
+  );
+}
+
+export default function GlobalMap() {
+  return (
+    <BrowserOnly fallback={<GlobalMapFallback />}>
+      {() => <GlobalMapContent />}
+    </BrowserOnly>
   );
 }
 
