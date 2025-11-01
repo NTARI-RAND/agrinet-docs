@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import Layout from "@theme/Layout";
 // Leaflet CSS is loaded from docusaurus.config.js stylesheets, so we do not import it here.
 
 const POLL_INTERVAL_MS = 30_000;
@@ -50,48 +51,55 @@ function MapShell({
   isUsingFallback,
 }) {
   return (
-    <div style={{ padding: 16 }}>
-      <h1>Agrinet Global Map</h1>
-      <p>
-        The map polls <code>{displayEndpoint}</code> every 30 seconds to keep
-        node locations and status up to date. Set the
-        <code>AGRINET_REGISTRY_URL</code> environment variable when building the
-        docs if your registry is hosted on another domain. If the registry
-        cannot be reached, the map falls back to the last published static
-        dataset.
-      </p>
+    <Layout
+      title="Global Map"
+      description="Monitor Agrinet node status and locations across the globe."
+    >
+      <main className="container margin-vert--lg">
+        <div style={{ padding: 16 }}>
+          <h1>Agrinet Global Map</h1>
+          <p>
+            The map polls <code>{displayEndpoint}</code> every 30 seconds to keep
+            node locations and status up to date. Set the
+            <code>AGRINET_REGISTRY_URL</code> environment variable when building
+            the docs if your registry is hosted on another domain. If the
+            registry cannot be reached, the map falls back to the last published
+            static dataset.
+          </p>
 
-      {errorMessage && (
-        <div
-          role="status"
-          style={{
-            background: "#fff3cd",
-            border: "1px solid #ffeeba",
-            color: "#856404",
-            borderRadius: 6,
-            padding: "12px 16px",
-            marginBottom: 16,
-          }}
-        >
-          {errorMessage}
+          {errorMessage && (
+            <div
+              role="status"
+              style={{
+                background: "#fff3cd",
+                border: "1px solid #ffeeba",
+                color: "#856404",
+                borderRadius: 6,
+                padding: "12px 16px",
+                marginBottom: 16,
+              }}
+            >
+              {errorMessage}
+            </div>
+          )}
+
+          <div style={{ height: 600, borderRadius: 6, overflow: "hidden" }}>
+            {children}
+          </div>
+
+          <p style={{ marginTop: 12 }}>
+            <a href="/data/global_map_layer.geojson" download>
+              Download the latest published GeoJSON snapshot
+            </a>
+            {isUsingFallback && !errorMessage && (
+              <span style={{ marginLeft: 8 }}>
+                (Currently displaying the fallback dataset.)
+              </span>
+            )}
+          </p>
         </div>
-      )}
-
-      <div style={{ height: 600, borderRadius: 6, overflow: "hidden" }}>
-        {children}
-      </div>
-
-      <p style={{ marginTop: 12 }}>
-        <a href="/data/global_map_layer.geojson" download>
-          Download the latest published GeoJSON snapshot
-        </a>
-        {isUsingFallback && !errorMessage && (
-          <span style={{ marginLeft: 8 }}>
-            (Currently displaying the fallback dataset.)
-          </span>
-        )}
-      </p>
-    </div>
+      </main>
+    </Layout>
   );
 }
 
