@@ -7,11 +7,11 @@ agrinet-team:
 product-design:
   name: Jodson Graves
   title: Lead Product Designer, Agrinet
-  url: https://github.com/agrinet
-  image_url: https://images.reactnative.dev/blog/authors/charlie-cheever.png
+  url: https://github.com/NetworkTheoryAppliedResearchInstitute
+  image_url: /img/authors/jodson.png
 
 devrel:
   name: Calvin Secrest Jr
   title: Developer Advocate, Agrinet
-  url: https://github.com/agrinet
-  image_url: https://images.reactnative.dev/blog/authors/elly.png
+  url: https://github.com/csecrestjr
+  image_url: /img/authors/calvin.png

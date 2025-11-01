@@ -202,7 +202,7 @@ function GlobalMapContent() {
         console.warn("Could not fit bounds:", error);
       }
     }
-  }, [geoJsonData]);
+  }, [leaflet, geoJsonData]);
 
   const displayEndpoint = nodesEndpoint || "/api/nodes";
 
