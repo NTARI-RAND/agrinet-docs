@@ -19,7 +19,7 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary: #8bc34a;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
   --ifm-color-primary-darkest: #1a8870;
@@ -27,4 +27,40 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.navbar__item--translations .navbar__link::before {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: 0.4rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 5h6M7 5v14M5 19h6M14 5h5M14 12h5M19 5v14'/%3E%3Cpath d='M14 19c0-3 3-5 5-5'/%3E%3Cpath d='M3 9h10'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.navbar__item--translations .navbar__link {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Ensure navbar dropdown menus appear above interactive map layers */
+.navbar {
+  z-index: 2100;
+}
+
+.navbar__item.dropdown .dropdown__menu {
+  z-index: 2200;
+}
+
+.globalMap__mapWrapper {
+  position: relative;
+  z-index: 0;
+}
+
+.globalMap__mapWrapper .leaflet-container {
+  position: relative;
+  z-index: 0;
 }

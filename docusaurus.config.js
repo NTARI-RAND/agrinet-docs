@@ -6,13 +6,77 @@
 
 import { themes as prismThemes } from "prism-react-renderer";
 
+const {
+  ALGOLIA_APP_ID,
+  ALGOLIA_API_KEY,
+  ALGOLIA_INDEX_NAME,
+  ALGOLIA_ASSISTANT_ID,
+  ALGOLIA_AI_APP_ID,
+  ALGOLIA_AI_API_KEY,
+  ALGOLIA_AI_INDEX_NAME,
+} = process.env;
+
+const locales = [
+  { code: "en", label: "English" },
+  { code: "fr", label: "Français" },
+  { code: "ja", label: "日本語" },
+  { code: "ko", label: "한국어" },
+  { code: "zh-Hans", label: "简体中文", htmlLang: "zh-Hans" },
+  { code: "es", label: "Español" },
+  { code: "tr", label: "Türkçe" },
+];
+
+const localeConfigs = Object.fromEntries(
+  locales.map(({ code, label, htmlLang }) => [
+    code,
+    { label, ...(htmlLang ? { htmlLang } : {}) },
+  ])
+);
+
+const algoliaAppId = ALGOLIA_APP_ID?.trim();
+const algoliaApiKey = ALGOLIA_API_KEY?.trim();
+const algoliaIndexName = ALGOLIA_INDEX_NAME?.trim();
+
+const hasAlgoliaCredentials = Boolean(
+  algoliaAppId && algoliaApiKey && algoliaIndexName
+);
+
+const assistantId = ALGOLIA_ASSISTANT_ID?.trim();
+const askAiAppId = ALGOLIA_AI_APP_ID?.trim() || algoliaAppId;
+const askAiApiKey = ALGOLIA_AI_API_KEY?.trim() || algoliaApiKey;
+const askAiIndexName = ALGOLIA_AI_INDEX_NAME?.trim() || algoliaIndexName;
+
+const hasAskAiCredentials = Boolean(
+  assistantId && askAiAppId && askAiApiKey && askAiIndexName
+);
+
+const askAiConfig = hasAskAiCredentials
+  ? {
+      assistantId,
+      appId: askAiAppId,
+      apiKey: askAiApiKey,
+      indexName: askAiIndexName,
+    }
+  : null;
+
+const algoliaConfig = hasAlgoliaCredentials
+  ? {
+      appId: algoliaAppId,
+      apiKey: algoliaApiKey,
+      indexName: algoliaIndexName,
+      contextualSearch: true,
+      searchPagePath: "search",
+      ...(askAiConfig ? { askAi: askAiConfig } : {}),
+    }
+  : null;
+
 // This runs in Node.js - Don"t use client-side code here (browser APIs, JSX...)
 
 /** @type {import("@docusaurus/types").Config} */
 const config = {
   title: "Agrinet Protocol",
   tagline: "Fruitful App & Agrinet Engine",
-  favicon: "img/favicon.ico",
+  favicon: "img/agrinet_favicon.ico",
 
   // Add the Leaflet CSS via CDN so pages that render maps (react-leaflet + leaflet)
   // get the stylesheet without importing 'leaflet/dist/leaflet.css' from JS.
@@ -32,7 +96,7 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: "https://your-docusaurus-site.example.com",
+  url: "http://theagri.net/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often "/<projectName>/"
   baseUrl: "/",
@@ -43,14 +107,19 @@ const config = {
   projectName: "agrinet-docs", // Usually your repo name.
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
+  },
 
   // Even if you don"t use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "en",
-    locales: ["en"],
+    locales: locales.map(({ code }) => code),
+    localeConfigs,
   },
 
   presets: [
@@ -94,9 +163,10 @@ const config = {
       colorMode: {
         respectPrefersColorScheme: true,
       },
+      ...(algoliaConfig ? { algolia: algoliaConfig } : {}),
       navbar: {
         title: "v1.0",
-        logo: { alt: "Agrinet Logo", src: "img/logo.svg" },
+        logo: { alt: "Agrinet Logo", src: "img/agrinet.png" },
         items: [
           {
             type: "docSidebar",
@@ -105,10 +175,20 @@ const config = {
             label: "Tutorial",
           },
           { to: "/blog", label: "Blog", position: "left" },
+          {
+            to: "/translations",
+            label: "Translations",
+            position: "left",
+            className: "navbar__item--translations",
+          },
           { to: "/global-map", label: "Global Map", position: "left" },
           {
-            href: "https://github.com/NTARI-RAND/Agrinet",
+            href: "https://github.com/NTARI-RAND/Agrinet/releases",
             label: "GitHub",
+            position: "right",
+          },
+          {
+            type: "localeDropdown",
             position: "right",
           },
         ],
@@ -149,7 +229,7 @@ const config = {
               { label: "Reddit", href: "https://www.reddit.com/r/NTARIorg/" },
               {
                 label: "LinkedIn",
-                href: "https://www.linkedin.com/company/ntari/",
+                href: "https://www.linkedin.com/company/ntari",
               },
             ],
           },
@@ -162,7 +242,7 @@ const config = {
               { label: "Terms", to: "/terms" },
               {
                 label: "GitHub",
-                href: "https://github.com/NTARI-RAND",
+                href: "https://github.com/NTARI-RAND/Agrinet",
               },
             ],
           },

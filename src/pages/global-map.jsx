@@ -124,6 +124,7 @@ function GlobalMapContent() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isUsingFallback, setIsUsingFallback] = useState(false);
   const mapRef = useRef(null);
+  const leafletRef = useRef(null);
 
   const registryBaseUrl = resolveRegistryBaseUrl();
   const nodesEndpoint = useMemo(
@@ -283,9 +284,9 @@ function GlobalMapContent() {
   }, [nodesEndpoint]);
 
   useEffect(() => {
-    if (geoJsonData && mapRef.current) {
+    if (geoJsonData && mapRef.current && leafletRef.current) {
       try {
-        const bounds = L.geoJSON(geoJsonData).getBounds();
+        const bounds = leafletRef.current.geoJSON(geoJsonData).getBounds();
         if (
           bounds && typeof bounds.isValid === "function"
             ? bounds.isValid()
