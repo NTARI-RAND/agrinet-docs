@@ -69,9 +69,7 @@ export default {
 };
 ```
 
-The locale dropdown now appears in your navbar:
-
-![Locale Dropdown](./img/localeDropdown.png)
+The locale dropdown now appears in your navbar, alongside the docs version menu. Agrinet Docs configures English, French, Japanese, Korean, Simplified Chinese, Spanish, and Turkish locales so translators can verify language switching without relying on screenshots.
 
 ## Build your localized site
 

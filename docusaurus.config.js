@@ -165,7 +165,7 @@ const config = {
       },
       ...(algoliaConfig ? { algolia: algoliaConfig } : {}),
       navbar: {
-        title: "v1.1",
+        title: "Agrinet Docs",
         logo: { alt: "Agrinet Logo", src: "img/agrinet.png" },
         items: [
           {

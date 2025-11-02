@@ -43,8 +43,12 @@ export default {
 };
 ```
 
-The docs version dropdown appears in your navbar after the site reloads, letting readers jump between published releases and the
-`current` work-in-progress docs.
+The docs version dropdown appears in your navbar after the site reloads. In this repository you should see:
+
+- **Next** – sourced directly from the editable `docs/` directory.
+- **1.1** – sourced from `versioned_docs/version-1.1/` and listed in `versions.json`.
+
+If a release is missing from the dropdown, double-check that a matching `versioned_docs/version-<number>/` folder exists and that the version label appears in `versions.json`. Without both pieces, Docusaurus will not expose the release in the UI.
 
 ## Update an existing version
 
