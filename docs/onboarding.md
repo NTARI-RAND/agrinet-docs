@@ -13,7 +13,7 @@ This guide walks you through the essentials for provisioning a new Agrinet feder
 - Node.js (v14 or newer)
 - Git
 - Yarn or npm
-- Access to the [Fruitful repository](https://github.com/NTARI-RAND/Agrinet)
+- Access to the [repository](https://github.com/NTARI-RAND/Agrinet)
 
 ## Clone the Repository
 
