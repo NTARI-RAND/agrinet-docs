@@ -43,12 +43,12 @@ export default {
 };
 ```
 
-The docs version dropdown appears in your navbar. On this site you will see two entries:
+The docs version dropdown appears in your navbar after the site reloads. In this repository you should see:
 
-- **Next** – the live documentation rendered from the `docs/` directory.
-- **1.1** – the frozen snapshot generated from `versioned_docs/version-1.1/` and registered in `versions.json`.
+- **Next** – sourced directly from the editable `docs/` directory.
+- **1.1** – sourced from `versioned_docs/version-1.1/` and listed in `versions.json`.
 
-If you expected an older release (for example `1.0`) and do not see it in the dropdown, inspect the repository to confirm whether a folder such as `versioned_docs/version-1.0/` exists and that the version label is present in `versions.json`. Only the versions listed in that file are exposed in the UI.
+If a release is missing from the dropdown, double-check that a matching `versioned_docs/version-<number>/` folder exists and that the version label appears in `versions.json`. Without both pieces, Docusaurus will not expose the release in the UI.
 
 ## Update an existing version
 
