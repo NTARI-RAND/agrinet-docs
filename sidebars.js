@@ -22,8 +22,15 @@ const sidebars = {
   // sidebars.js
   tutorial: [
     "intro",
-    "onboarding",
+    "quickstart",
+    "engine-tools",
+    "marketplace-api",
+    "chat-sse",
+    "sms-setup",
+    "payments",
     "federation-guide",
+    "federation-node-guide",
+    "onboarding",
     "api-testing",
     "chat-ui",
     {

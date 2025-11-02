@@ -165,7 +165,7 @@ const config = {
       },
       ...(algoliaConfig ? { algolia: algoliaConfig } : {}),
       navbar: {
-        title: "v1.0",
+        title: "v1.1",
         logo: { alt: "Agrinet Logo", src: "img/agrinet.png" },
         items: [
           {
@@ -188,6 +188,11 @@ const config = {
             position: "right",
           },
           {
+            type: "docsVersionDropdown",
+            position: "right",
+            dropdownActiveClassDisabled: true,
+          },
+          {
             type: "localeDropdown",
             position: "right",
           },
@@ -201,7 +206,7 @@ const config = {
             items: [
               { label: "Tutorial", to: "/docs/intro" },
               { label: "Onboarding", to: "/docs/onboarding" },
-              { label: "Federation Guide", to: "/docs/federation-guide" },
+              { label: "Federation Guide", to: "/docs/federation-node-guide" },
               { label: "API Testing", to: "/docs/api-testing" },
             ],
           },
