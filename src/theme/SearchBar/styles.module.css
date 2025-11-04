@@ -4,7 +4,7 @@
   --docsearch-text-color: var(--ifm-font-color-base);
   --docsearch-muted-color: var(--ifm-color-content-secondary);
   --docsearch-searchbox-background: color-mix(in srgb, var(--ifm-background-surface-color) 94%, transparent);
-  --docsearch-searchbox-focus-background: color-mix(in srgb, var(--ifm-background-surface-color) 98%, var(--ifm-color-primary) 8%);
+  --docsearch-searchbox-focus-background: color-mix(in srgb, var(--ifm-background-surface-color) 92%, var(--ifm-color-primary) 8%);
   --docsearch-searchbox-shadow: none;
   --docsearch-hit-background: var(--ifm-background-surface-color);
   --docsearch-hit-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
