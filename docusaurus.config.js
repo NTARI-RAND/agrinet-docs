@@ -104,11 +104,8 @@ const config = {
   projectName: "agrinet-docs", // Usually your repo name.
 
   onBrokenLinks: "throw",
-  markdown: {
-    hooks: {
-      onBrokenMarkdownLinks: "warn",
-    },
-  },
+  onBrokenMarkdownLinks: "warn",
+  markdown: {},
 
   // Even if you don"t use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
