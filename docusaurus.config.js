@@ -73,7 +73,7 @@ const algoliaConfig = hasAlgoliaCredentials
 const config = {
   title: "Agrinet Protocol",
   tagline: "Fruitful App & Agrinet Engine",
-  favicon: "img/favicon.ico",
+  favicon: "img/agrinet_favicon.ico",
 
   // Add the Leaflet CSS via CDN so pages that render maps (react-leaflet + leaflet)
   // get the stylesheet without importing 'leaflet/dist/leaflet.css' from JS.
@@ -93,7 +93,7 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: "https://your-docusaurus-site.example.com",
+  url: "http://theagri.net/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often "/<projectName>/"
   baseUrl: "/",
@@ -159,8 +159,8 @@ const config = {
       },
       ...(algoliaConfig ? { algolia: algoliaConfig } : {}),
       navbar: {
-        title: "v1.0",
-        logo: { alt: "Agrinet Logo", src: "img/logo.svg" },
+        title: "Agrinet Docs",
+        logo: { alt: "Agrinet Logo", src: "img/agrinet.png" },
         items: [
           {
             type: "docSidebar",
@@ -182,6 +182,11 @@ const config = {
             position: "right",
           },
           {
+            type: "docsVersionDropdown",
+            position: "right",
+            dropdownActiveClassDisabled: true,
+          },
+          {
             type: "localeDropdown",
             position: "right",
           },
@@ -195,7 +200,7 @@ const config = {
             items: [
               { label: "Tutorial", to: "/docs/intro" },
               { label: "Onboarding", to: "/docs/onboarding" },
-              { label: "Federation Guide", to: "/docs/federation-guide" },
+              { label: "Federation Guide", to: "/docs/federation-node-guide" },
               { label: "API Testing", to: "/docs/api-testing" },
             ],
           },

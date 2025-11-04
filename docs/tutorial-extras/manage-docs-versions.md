@@ -43,9 +43,12 @@ export default {
 };
 ```
 
-The docs version dropdown appears in your navbar:
+The docs version dropdown appears in your navbar. On this site you will see two entries:
 
-![Docs Version Dropdown](./img/docsVersionDropdown.png)
+- **Next** – the live documentation rendered from the `docs/` directory.
+- **1.1.0** – the frozen snapshot generated from `versioned_docs/version-1.1.0/` and registered in `versions.json`.
+
+If you expected an older release (for example `1.0`) and do not see it in the dropdown, inspect the repository to confirm whether a folder such as `versioned_docs/version-1.0/` exists and that the version label is present in `versions.json`. Only the versions listed in that file are exposed in the UI.
 
 ## Update an existing version
 

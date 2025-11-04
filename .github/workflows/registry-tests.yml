@@ -1,0 +1,31 @@
+name: Registry Tests
+
+on:
+  push:
+    paths:
+      - 'server/**'
+      - 'src/pages/global-map.jsx'
+      - '.github/workflows/registry-tests.yml'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'README.md'
+  pull_request:
+    paths:
+      - 'server/**'
+      - 'src/pages/global-map.jsx'
+      - '.github/workflows/registry-tests.yml'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'README.md'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
