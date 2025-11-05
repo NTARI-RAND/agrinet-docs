@@ -65,25 +65,21 @@ function useTransformSearchClient() {
     siteMetadata: { docusaurusVersion },
   } = useDocusaurusContext();
 
-  return useCallback(
-    (searchClient) => {
-      searchClient.addAlgoliaAgent("docusaurus", docusaurusVersion);
-      return searchClient;
-    },
-    [docusaurusVersion]
-  );
+  return useCallback((searchClient) => {
+    searchClient.addAlgoliaAgent("docusaurus", docusaurusVersion);
+    return searchClient;
+  }, [docusaurusVersion]);
 }
 
 function useTransformItems({ transformItems }) {
   const processSearchResultUrl = useSearchResultUrlProcessor();
-  const [transformer] = useState(
-    () => (items) =>
-      transformItems
-        ? transformItems(items)
-        : items.map((item) => ({
-            ...item,
-            url: processSearchResultUrl(item.url),
-          }))
+  const [transformer] = useState(() => (items) =>
+    transformItems
+      ? transformItems(items)
+      : items.map((item) => ({
+          ...item,
+          url: processSearchResultUrl(item.url),
+        })),
   );
 
   return transformer;
@@ -92,9 +88,10 @@ function useTransformItems({ transformItems }) {
 function useResultsFooterComponent({ closeModal }) {
   return useMemo(
     () =>
-      ({ state }) =>
-        <ResultsFooter state={state} onClose={closeModal} />,
-    [closeModal]
+      ({ state }) => (
+        <ResultsFooter state={state} onClose={closeModal} />
+      ),
+    [closeModal],
   );
 }
 
@@ -107,10 +104,7 @@ function ResultsFooter({ state, onClose }) {
 
   return (
     <Link to={createSearchLink(state.query)} onClick={onClose}>
-      <Translate
-        id="theme.SearchBar.seeAll"
-        values={{ count: state.context.nbHits }}
-      >
+      <Translate id="theme.SearchBar.seeAll" values={{ count: state.context.nbHits }}>
         {"See all {count} results"}
       </Translate>
     </Link>
@@ -155,7 +149,30 @@ function createDocIndex(allDocsData) {
       version.docs.map((doc) => {
         const description =
           doc.description || doc.frontMatter?.description || "";
-        const keywords = Array.isArray(doc.keywords) ? doc.keywords : [];
+        const keywords = Array.isArray(doc.keywords)
+          ? doc.keywords
+          : Array.isArray(doc.frontMatter?.keywords)
+          ? doc.frontMatter.keywords
+          : [];
+        const tags = Array.isArray(doc.frontMatter?.tags)
+          ? doc.frontMatter.tags.map((tag) =>
+              typeof tag === "string"
+                ? tag
+                : tag?.label || tag?.permalink || "",
+            )
+          : [];
+        const extraTokens = [
+          doc.id,
+          doc.permalink,
+          doc.path,
+          doc.slug,
+          doc.title,
+          doc.frontMatter?.title,
+          doc.frontMatter?.sidebar_label,
+          doc.sidebar_label,
+          doc.sidebar,
+        ];
+
         const fallbackTitle =
           doc.title ??
           doc.frontMatter?.title ??
@@ -168,17 +185,26 @@ function createDocIndex(allDocsData) {
             ? fallbackTitle
             : String(fallbackTitle);
 
+        const textParts = [
+          title,
+          description,
+          keywords.join(" "),
+          tags.join(" "),
+          extraTokens.filter(Boolean).join(" "),
+        ].filter(Boolean);
+
         return {
           id: doc.id,
           title,
           description,
-          permalink: doc.permalink,
-          searchText: `${title} ${description} ${keywords.join(
-            " "
-          )}`.toLowerCase(),
+          permalink: doc.permalink || doc.path,
+          searchText: textParts
+            .join(" ")
+            .replace(/\s+/g, " ")
+            .toLowerCase(),
         };
-      })
-    )
+      }),
+    ),
   );
 }
 
@@ -203,16 +229,20 @@ function AlgoliaSearchBar({ config, className, ...rest }) {
   const [isOpen, setIsOpen] = useState(false);
   const [initialQuery, setInitialQuery] = useState(undefined);
 
-  const { extraAskAiProps, currentPlaceholder, isAskAiActive, onAskAiToggle } =
-    useAlgoliaAskAi({
-      indexName: config.indexName,
-      apiKey: config.apiKey,
-      appId: config.appId,
-      placeholder: config.placeholder,
-      translations: config.translations,
-      searchParameters: config.searchParameters,
-      askAi: askAiConfig,
-    });
+  const {
+    extraAskAiProps,
+    currentPlaceholder,
+    isAskAiActive,
+    onAskAiToggle,
+  } = useAlgoliaAskAi({
+    indexName: config.indexName,
+    apiKey: config.apiKey,
+    appId: config.appId,
+    placeholder: config.placeholder,
+    translations: config.translations,
+    searchParameters: config.searchParameters,
+    askAi: askAiConfig,
+  });
 
   const askAiEnabled = Boolean(askAiConfig);
 
@@ -238,18 +268,15 @@ function AlgoliaSearchBar({ config, className, ...rest }) {
     }
   }, [onAskAiToggle]);
 
-  const handleInput = useCallback(
-    (event) => {
-      if (event.key === "f" && (event.metaKey || event.ctrlKey)) {
-        return;
-      }
+  const handleInput = useCallback((event) => {
+    if (event.key === "f" && (event.metaKey || event.ctrlKey)) {
+      return;
+    }
 
-      event.preventDefault();
-      setInitialQuery(event.key);
-      openModal();
-    },
-    [openModal]
-  );
+    event.preventDefault();
+    setInitialQuery(event.key);
+    openModal();
+  }, [openModal]);
 
   const resultsFooterComponent = useResultsFooterComponent({ closeModal });
 
@@ -282,8 +309,7 @@ function AlgoliaSearchBar({ config, className, ...rest }) {
   const askAiBadgeLabel = translate({
     id: "theme.SearchBar.askAiBadgeLabel",
     message: "Ask AI",
-    description:
-      "Label for the Ask AI badge displayed next to the search trigger",
+    description: "Label for the Ask AI badge displayed next to the search trigger",
   });
 
   return (
@@ -296,11 +322,9 @@ function AlgoliaSearchBar({ config, className, ...rest }) {
         />
       </Head>
 
-      <div
-        className={clsx(styles.algoliaButtonWrapper, {
-          [styles.algoliaButtonWithBadge]: askAiEnabled,
-        })}
-      >
+      <div className={clsx(styles.algoliaButtonWrapper, {
+        [styles.algoliaButtonWithBadge]: askAiEnabled,
+      })}>
         <DocSearchButton
           className={styles.algoliaButton}
           onTouchStart={importDocSearchModalIfNeeded}
@@ -317,9 +341,7 @@ function AlgoliaSearchBar({ config, className, ...rest }) {
         )}
       </div>
 
-      {isOpen &&
-        DocSearchModal &&
-        searchContainer.current &&
+      {isOpen && DocSearchModal && searchContainer.current &&
         createPortal(
           <DocSearchModal
             {...config}
@@ -338,7 +360,7 @@ function AlgoliaSearchBar({ config, className, ...rest }) {
             searchParameters={searchParameters}
             {...extraAskAiProps}
           />,
-          searchContainer.current
+          searchContainer.current,
         )}
     </div>
   );
@@ -389,10 +411,7 @@ function LocalSearchBar({ className, ...rest }) {
     }
 
     function handleClickOutside(event) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     }
@@ -403,7 +422,7 @@ function LocalSearchBar({ className, ...rest }) {
 
   const placeholder = translate({
     id: "theme.SearchBar.placeholder",
-    message: "Search",
+    message: "Search documentation",
     description: "Placeholder for the local search input",
   });
 
@@ -422,9 +441,7 @@ function LocalSearchBar({ className, ...rest }) {
       return;
     }
 
-    history.push(
-      results[Math.min(highlightedIndex, results.length - 1)].permalink
-    );
+    history.push(results[Math.min(highlightedIndex, results.length - 1)].permalink);
     setIsOpen(false);
     setQuery("");
   };
@@ -435,9 +452,7 @@ function LocalSearchBar({ className, ...rest }) {
       setHighlightedIndex((index) => (index + 1) % results.length);
     } else if (event.key === "ArrowUp" && results.length > 0) {
       event.preventDefault();
-      setHighlightedIndex(
-        (index) => (index - 1 + results.length) % results.length
-      );
+      setHighlightedIndex((index) => (index - 1 + results.length) % results.length);
     } else if (event.key === "Escape") {
       setIsOpen(false);
       event.currentTarget.blur();
@@ -473,11 +488,7 @@ function LocalSearchBar({ className, ...rest }) {
         <ul className={styles.results} role="listbox">
           {results.length > 0 ? (
             results.map((result, index) => (
-              <li
-                key={result.permalink}
-                role="option"
-                aria-selected={index === highlightedIndex}
-              >
+              <li key={result.permalink} role="option" aria-selected={index === highlightedIndex}>
                 <Link
                   to={result.permalink}
                   className={clsx(styles.resultLink, {
@@ -491,9 +502,7 @@ function LocalSearchBar({ className, ...rest }) {
                 >
                   <span className={styles.resultTitle}>{result.title}</span>
                   {result.description && (
-                    <span className={styles.resultDescription}>
-                      {result.description}
-                    </span>
+                    <span className={styles.resultDescription}>{result.description}</span>
                   )}
                 </Link>
               </li>
@@ -515,7 +524,9 @@ export default function SearchBar(props) {
   } = useDocusaurusContext();
 
   if (themeConfig?.algolia) {
-    return <AlgoliaSearchBar config={themeConfig.algolia} {...props} />;
+    return (
+      <AlgoliaSearchBar config={themeConfig.algolia} {...props} />
+    );
   }
 
   return <LocalSearchBar {...props} />;

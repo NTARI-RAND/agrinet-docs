@@ -40,101 +40,24 @@ GIT_USER=<Your GitHub username> yarn deploy
 
 If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
 
-## Live registry server
+## Search configuration
 
-The global map now polls a lightweight registry service that keeps track of node
-locations and their latest heartbeat. You can run a local instance of the
-registry alongside the Docusaurus dev server:
+The site bundles a local documentation search that works without any external services so local development and preview deployments always include a working search bar. When real Algolia DocSearch credentials are present we automatically switch to Algolia. Ask AI is now configured separately so you can enable Algolia search without Ask AI or vice versa, depending on the credentials you supply. The Algolia-powered experience adopts a React.dev-inspired pill trigger with a dedicated Ask AI badge so visitors immediately discover when conversational answers are available.
 
-```bash
-# start the registry (defaults to http://0.0.0.0:4000)
-yarn registry
-
-# in another terminal start the docs (which proxy to the same origin by default)
-yarn start
-```
-
-Set the `AGRINET_REGISTRY_URL` environment variable before running `yarn start`
-or `yarn build` if the API lives on a different domain than the docs (for
-example, `AGRINET_REGISTRY_URL=https://registry.example.org`). Docusaurus
-embeds this value at build time, so redeploy the site after changing it.
-
-### Authentication & CORS
-
-Write operations are disabled unless you provide a shared secret via
-`REGISTRY_WRITE_TOKEN`. Clients must send this token in an `Authorization`
-header (Bearer token) or an `x-api-key` header when calling `POST`, `PUT`, or
-`DELETE` endpoints. Configure the optional `REGISTRY_READ_ORIGINS` and
-`REGISTRY_WRITE_ORIGINS` environment variables (comma-separated lists) to
-restrict which browsers may call the read or write APIs. By default reads allow
-any origin and writes only respond to same-origin requests.
-
-Example of registering a node and sending a heartbeat with a token stored in
-`$REGISTRY_WRITE_TOKEN`:
+Create a `.env` file (or export the variables in your shell) with the following values to enable Algolia search and Ask AI:
 
 ```bash
-curl -H "Authorization: Bearer $REGISTRY_WRITE_TOKEN" \
-  -H "Content-Type: application/json" \
-  -X POST http://localhost:4000/api/nodes \
-  -d '{
-    "type": "Feature",
-    "properties": {
-      "node_name": "Example node",
-      "contact_email": "ops@example.org"
-    },
-    "geometry": {
-      "type": "Point",
-      "coordinates": [36.82, -1.29]
-    }
-  }'
+ALGOLIA_APP_ID="..."
+ALGOLIA_API_KEY="..."          # Search-only API key
+ALGOLIA_INDEX_NAME="..."
 
-curl -H "Authorization: Bearer $REGISTRY_WRITE_TOKEN" \
-  -H "Content-Type: application/json" \
-  -X PUT http://localhost:4000/api/nodes/example-node/ping \
-  -d '{"last_seen": "2025-01-01T00:00:00Z"}'
+# Optional Ask AI configuration
+ALGOLIA_ASSISTANT_ID="..."     # Algolia Ask AI assistant identifier
+
+# Optional overrides if your Ask AI integration uses a dedicated application or index
+# ALGOLIA_AI_APP_ID="..."
+# ALGOLIA_AI_API_KEY="..."
+# ALGOLIA_AI_INDEX_NAME="..."
 ```
 
-Nodes can register themselves with `POST /api/nodes`, send heartbeat updates via
-`PUT /api/nodes/:id/ping`, and map clients consume the `GET /api/nodes`
-endpoint. The server persists data to `server/nodes.json` using atomic file
-writes and also seeds from `static/data/global_map_layer.geojson` if no
-database has been created yet.
-
-### Rate limiting
-
-Write operations are throttled to 120 requests per minute (per token/IP) by
-default. Tune this by setting `REGISTRY_RATE_LIMIT_MAX_WRITES` and
-`REGISTRY_RATE_LIMIT_WINDOW_MS` (milliseconds) when launching the registry. Set
-`REGISTRY_RATE_LIMIT_MAX_WRITES=0` to disable rate limiting entirely.
-
-### Logging & monitoring
-
-The registry emits structured JSON logs for key lifecycle events (registrations,
-heartbeats, deletions, and rate-limit violations). Each log line includes a
-timestamp, log level, message, and contextual metadata so you can forward the
-output directly to your log aggregation pipeline.
-
-For lightweight monitoring without a full metrics stack, the registry exposes a
-`GET /api/metrics` endpoint. The response includes cumulative counters for
-registrations, heartbeats, deletions, and rate-limit denials, alongside derived
-node counts (total/online/offline) and the configured rate-limit window. Poll
-this endpoint from your observability platform or feed it into Prometheus via a
-custom collector.
-
-### Continuous integration
-
-GitHub Actions runs the registry smoke tests on every pull request and on
-pushes that touch the registry, map page, or related configuration. Run the same
-checks locally with:
-
-```bash
-yarn test
-```
-
-### Tests
-
-Run the registry smoke tests with:
-
-```bash
-yarn test
-```
+Only set the Ask AI variables when your DocSearch application is configured for the experience; otherwise they can be left unset. Without the variables, the site keeps using the bundled local documentation search (or Algolia, if those credentials are provided) without attempting to activate Ask AI. When both the Algolia credentials and an Ask AI assistant are present, the configuration automatically wires the assistant into DocSearch so the modal can surface the conversational panel just like the React.dev experience. Leaving the Ask AI fields empty while still providing Algolia credentials yields the traditional DocSearch-only UI.

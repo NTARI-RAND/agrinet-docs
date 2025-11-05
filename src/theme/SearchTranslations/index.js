@@ -281,9 +281,9 @@ const translations = {
         description: "The ARIA label for close key in footer",
       }),
       poweredByText: translate({
-        id: "theme.SearchModal.footer.searchByText",
+        id: "theme.SearchModal.footer.poweredByText",
         message: "Powered by",
-        description: "The 'Powered by' text for footer",
+        description: "The 'Powered by' text for the fallback search footer",
       }),
       searchByText: translate({
         id: "theme.SearchModal.footer.searchByText",
