@@ -422,7 +422,7 @@ function LocalSearchBar({ className, ...rest }) {
 
   const placeholder = translate({
     id: "theme.SearchBar.placeholder",
-    message: "Search documentation",
+    message: "Search",
     description: "Placeholder for the local search input",
   });
 
