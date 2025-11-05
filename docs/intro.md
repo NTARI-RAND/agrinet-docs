@@ -317,7 +317,7 @@ git -C /opt/Agrinet rev-parse HEAD
 
 ---
 
-Happy deploying! If you want, I can:
-- Produce a ready-to-deploy systemd unit and env file tailored to the Agrinet repo (I just need the repository start script or `package.json` main).
+Happy deploying! If you want to try:
+- Produce a ready-to-deploy systemd unit and env file tailored to the Agrinet repo (You will just need the repository start script or `package.json` main).
 - Generate a bootstrap script (keygen, config, build, start) that you can run on EC2 to automate node creation.
-- Convert the registration example into the exact API payload for your federation controller if you paste its API spec or sample.
+- Convert the registration example into the exact API payload for your federation controller if you add its API spec or sample.
