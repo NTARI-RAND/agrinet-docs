@@ -41,7 +41,7 @@ feedback that keeps things fast and predictable.</li>
 <p><strong>And if you don't want a blog</strong>: just delete this directory, and use <code>blog: false</code> in your Docusaurus config.</p>]]></content>
         <author>
             <name>Agrinet Core Team</name>
-            <uri>https://github.com/agrinet</uri>
+            <uri>https://github.com/NTARI-RAND/Agrinet</uri>
         </author>
         <category label="Announcements" term="Announcements"/>
     </entry>
@@ -125,7 +125,7 @@ the same toolkit.</li>
 plugged into the <a href="https://github.com/agrinet" target="_blank" rel="noopener noreferrer" class="">Agrinet GitHub org</a> for release notes.</p>]]></content>
         <author>
             <name>Agrinet Core Team</name>
-            <uri>https://github.com/agrinet</uri>
+            <uri>https://github.com/NTARI-RAND/Agrinet</uri>
         </author>
         <category label="Releases" term="Releases"/>
         <category label="Platform" term="Platform"/>
