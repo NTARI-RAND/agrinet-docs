@@ -2,7 +2,7 @@
   <rect width="1200" height="1600" fill="#f6f0e5" />
   <rect width="1200" height="220" fill="#3a5b46" />
   <text x="600" y="140" font-family="'DejaVu Sans', Arial, sans-serif" font-size="64" fill="#ffffff" text-anchor="middle">
-    Input Costs & Methods
+    Input Costs &amp; Methods
   </text>
   <text x="600" y="200" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#ffffff" text-anchor="middle">
     Smart Resource Planning
