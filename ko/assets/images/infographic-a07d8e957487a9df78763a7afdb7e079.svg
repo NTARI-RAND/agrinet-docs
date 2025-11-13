@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1000" viewBox="0 0 1400 1000">
+  <rect width="1400" height="1000" fill="#f6f0e5" />
+  <text x="700" y="90" font-family="'DejaVu Sans', Arial, sans-serif" font-size="56" fill="#3a5b46" text-anchor="middle">
+    Grow Value, Not Just Grass
+  </text>
+  <g transform="translate(80,150)">
+    <rect width="360" height="320" rx="20" fill="#e2d4bd" />
+    <text x="180" y="60" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      From Expense
+    </text>
+    <text x="180" y="100" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      to Ecosystem
+    </text>
+    <text x="60" y="160" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Redirect lawn budget to productive beds
+    </text>
+    <text x="60" y="210" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Layer soil health, pollinator, and water loops
+    </text>
+    <text x="60" y="260" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Track every input in Agrinet for reuse
+    </text>
+  </g>
+  <g transform="translate(520,150)">
+    <rect width="360" height="320" rx="20" fill="#e2d4bd" />
+    <text x="180" y="60" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      Intensive Farming
+    </text>
+    <text x="180" y="100" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      Alternative
+    </text>
+    <text x="60" y="160" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Guild-based planting with PING crop plans
+    </text>
+    <text x="60" y="210" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Continuous harvest through succession sowing
+    </text>
+    <text x="60" y="260" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Seasonal tunnels extend Louisville market windows
+    </text>
+  </g>
+  <g transform="translate(960,150)">
+    <rect width="360" height="320" rx="20" fill="#e2d4bd" />
+    <text x="180" y="60" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      Revenue Potential
+    </text>
+    <text x="60" y="160" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • $6k-$13.5k annual value from 2,500 sq ft
+    </text>
+    <text x="60" y="210" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Community credits + sustainability bonuses
+    </text>
+    <text x="60" y="260" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Blockchain receipts build trust with buyers
+    </text>
+  </g>
+  <g transform="translate(80,520)">
+    <rect width="360" height="320" rx="20" fill="#e2d4bd" />
+    <text x="180" y="60" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      Lawn Conversion
+    </text>
+    <text x="60" y="160" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Map water, solar, and soil assets
+    </text>
+    <text x="60" y="210" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Deploy raised beds, perennial borders, agroforestry
+    </text>
+    <text x="60" y="260" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Capture rainwater into cistern-fed drip loops
+    </text>
+  </g>
+  <g transform="translate(520,520)">
+    <rect width="360" height="320" rx="20" fill="#e2d4bd" />
+    <text x="180" y="60" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      Grow Value
+    </text>
+    <text x="180" y="100" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      Not Just Grass
+    </text>
+    <text x="60" y="160" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Water savings + revenue + sustainability credits
+    </text>
+    <text x="60" y="210" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Community trust through transparent supply records
+    </text>
+    <text x="60" y="260" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Agrinet federated network connects neighbors
+    </text>
+  </g>
+  <g transform="translate(960,520)">
+    <rect width="360" height="320" rx="20" fill="#e2d4bd" />
+    <text x="180" y="60" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#3a5b46" text-anchor="middle">
+      Federated Network
+    </text>
+    <text x="60" y="160" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Linked buyers &amp; producers through Agrinet
+    </text>
+    <text x="60" y="210" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • LBTAS contracts document supply, payments, audits
+    </text>
+    <text x="60" y="260" font-family="'DejaVu Sans', Arial, sans-serif" font-size="28" fill="#333333">
+      • Shared playbooks accelerate new grower onboarding
+    </text>
+  </g>
+</svg>
