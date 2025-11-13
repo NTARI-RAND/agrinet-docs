@@ -7,66 +7,246 @@ image: ./infographic.svg
 description: Convert Louisville lawns into productive micro-farms with Fruitful coordination, transparent blockchain tracking, and proven revenue pathways.
 ---
 
-![Grow Value, Not Just Grass overview](./infographic.svg)
+import styles from './styles.module.css';
 
-![Lawn to Table Infographic](./lawn_table.png)
+<div className={styles.hero}>
+  <div className={styles.heroContent}>
+    <h1 className={styles.heroTitle}>From Lawn to Table</h1>
+    <p className={styles.heroSubtitle}>
+      Transform turf-heavy yards into resilient micro-farms that pay for themselves. Fruitful playbooks combine agronomic design,
+      transparent data sharing, and neighborhood marketplaces to unlock a new revenue stream for Louisville households.
+    </p>
 
-Louisville households are spending thousands each year to keep turf grass alive while a thriving network of buyers seeks transparent, local produce. Agrinet's Fruitful playbooks make it practical to flip that expense into a resilient ecosystem that serves neighbors, chefs, and mutual aid partners. This guide distills the latest agronomic, economic, and trust-building practices our core team is deploying with homeowners across Jefferson County.
+    <div className={styles.heroHighlights}>
+      <div className={styles.heroHighlight}>
+        <h3>Hidden Lawn Costs</h3>
+        <p>$1,800–$3,600 yearly upkeep + 10k gallons of water</p>
+      </div>
+      <div className={styles.heroHighlight}>
+        <h3>Fruitful Yield Potential</h3>
+        <p>$6,000–$13,500 value from a 2,500 sq ft plan</p>
+      </div>
+      <div className={styles.heroHighlight}>
+        <h3>Resource Recovery</h3>
+        <p>Up to 70% water savings via drip + rain capture</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-## Lawn economics vs. edible ecosystems
+<section className={styles.section}>
+  <h2 className={styles.sectionTitle}>
+    <span>Louisville Yard Reality</span>
+    Hidden costs of traditional lawns
+  </h2>
+  <div className={styles.twoColumn}>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Expense</span>
+        <h3 className={styles.cardTitle}>Where the money goes</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>$1,800–$3,600 every year on mowing, fertilizing, and watering.</li>
+        <li>Equipment purchases add another $200–$400 annually.</li>
+        <li>More than 10,000 gallons of potable water sprayed on non-edible turf.</li>
+      </ul>
+    </div>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Opportunity</span>
+        <h3 className={styles.cardTitle}>What a Fruitful yard delivers</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>$6,000–$13,500 in annual food value with a 2,500 sq ft layout.</li>
+        <li>Rainwater capture, drip irrigation, and mulch loops slash resource use.</li>
+        <li>Agrinet coordination keeps inputs, harvests, and surplus monetization on track.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-Maintaining a conventional lawn can run $1,800–$3,600 annually before equipment purchases and requires more than 10,000 gallons of water each year. By contrast, a 2,500-square-foot Fruitful layout can generate $6,000–$13,500 in annual value while recycling water, nutrients, and data across the Agrinet network.
+<div className={styles.imageRow}>
+  <div className={styles.imageCard}>
+    <img src={require('./overview.svg').default} alt="Cost comparison overview" loading="lazy" />
+  </div>
+  <div className={styles.imageCard}>
+    <img src={require('./lawn_table.png').default} alt="Lawn to table infographic" loading="lazy" />
+  </div>
+</div>
 
-![Cost comparison overview](./overview.svg)
+<section className={styles.section}>
+  <h2 className={styles.sectionTitle}>
+    <span>Intensive Farming Alternative</span>
+    High-yield production built for Louisville yards
+  </h2>
+  <div className={styles.twoColumn}>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Method</span>
+        <h3 className={styles.cardTitle}>What intensive farming means</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>Bed layouts that maximize harvest per square foot.</li>
+        <li>Succession sowing and companion planting to reduce gaps.</li>
+        <li>Season extension tunnels that hold supply into winter.</li>
+      </ul>
+    </div>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Yield Scenarios</span>
+        <h3 className={styles.cardTitle}>2,500 sq ft production</h3>
+      </div>
+      <div className={styles.statGrid}>
+        <div className={styles.statCard}>
+          <strong>Learner crews</strong>
+          <p>2,500 lb produce → $7,300 gross → $3,000–$4,500 grocery savings</p>
+        </div>
+        <div className={styles.statCard}>
+          <strong>Mid-tier growers</strong>
+          <p>5,000 lb produce → $15,000 gross → $9,000–$13,500 savings</p>
+        </div>
+        <div className={styles.statCard}>
+          <strong>High-optimization teams</strong>
+          <p>7,500 lb produce → $22,500 gross → $16,800–$25,100 savings</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-Key shifts include:
+<div className={styles.imageRow}>
+  <div className={styles.imageCard}>
+    <img src={require('./intensive-farming.svg').default} alt="High-yield scenarios for Louisville" loading="lazy" />
+  </div>
+  <div className={styles.imageCard}>
+    <img src={require('./input-costs.svg').default} alt="Input and method summary" loading="lazy" />
+  </div>
+</div>
 
-- Reallocating lawn care spending into soil health investments and resilient infrastructure.
-- Capturing rainwater and using drip irrigation to achieve up to 70% water savings versus turf.
-- Tracking every input and harvest through Agrinet so nothing is wasted.
+<section className={styles.section}>
+  <h2 className={styles.sectionTitle}>
+    <span>Input Discipline</span>
+    Managing costs with regenerative loops
+  </h2>
+  <div className={styles.twoColumn}>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Water &amp; Soil</span>
+        <h3 className={styles.cardTitle}>Close the resource loop</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>Drip irrigation and cisterns recycle rainwater for up to 70% savings.</li>
+        <li>Mulch and shade netting stabilize soil moisture through Kentucky heat waves.</li>
+        <li>Compost and cover crops keep fertility on site.</li>
+      </ul>
+    </div>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Protection &amp; Guilds</span>
+        <h3 className={styles.cardTitle}>Natural defenses, smarter plantings</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>Row covers, beneficial insects, and low tunnels minimize pest pressure.</li>
+        <li>Guilds like tomatoes + basil + marigold or the Three Sisters trio cut inputs 10–30%.</li>
+        <li>Quick greens, lettuce, and radish rotations keep revenue steady.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-## Intensive farming alternatives tailored for Louisville
+<section className={styles.section}>
+  <h2 className={styles.sectionTitle}>
+    <span>Fruitful Advantage</span>
+    Coordination, transparency, and trust
+  </h2>
+  <div className={styles.twoColumn}>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Before Planting</span>
+        <h3 className={styles.cardTitle}>Plan every bed with PING</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>Weekly digital updates align layout, inputs, and harvest targets.</li>
+        <li>Interactive maps show guild pairings and succession timelines.</li>
+        <li>Issue alerts keep crews proactive instead of reactive.</li>
+      </ul>
+    </div>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>During &amp; After</span>
+        <h3 className={styles.cardTitle}>Transparency that sells</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>PING shares live bed status, expected yields, and delivery cadence.</li>
+        <li>LBTAS blockchain logs varieties, harvest dates, and quality for each drop.</li>
+        <li>Premium buyers reward the audit trail while poor quality flags trigger remediation.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-![High-yield scenarios](./intensive-farming.svg)
+<div className={styles.illustration}>
+  <img src={require('./fruitful-advantage.svg').default} alt="Fruitful coordination and trust graphic" loading="lazy" />
+</div>
 
-Fruitful's bed maps, succession planting calendars, and season extension kits maximize harvests from tight urban and suburban parcels. Depending on experience level, growers can expect:
+<section className={styles.section}>
+  <h2 className={styles.sectionTitle}>
+    <span>Market Momentum</span>
+    Monetize surplus and onboard neighbors
+  </h2>
+  <div className={styles.twoColumn}>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Revenue Model</span>
+        <h3 className={styles.cardTitle}>Premiums built on transparency</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>Fruitful + PING + LBTAS earn 25–40% more than anonymous wholesale.</li>
+        <li>Trustworthy ledgers cut transaction disputes by up to 50%.</li>
+        <li>Carbon credits add $15–$25 per yard via documented soil building.</li>
+      </ul>
+    </div>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardBadge}>Onboarding Steps</span>
+        <h3 className={styles.cardTitle}>Launch a neighborhood supply node</h3>
+      </div>
+      <ul className={styles.cardList}>
+        <li>Pilot 500 sq ft to dial in irrigation, soil amendments, and harvest cadence.</li>
+        <li>Coordinate with local chefs, CSA buyers, and mutual aid partners through Agrinet.</li>
+        <li>Log deliveries and quality checks in LBTAS to build a premium-ready ledger.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-- **Learner crews** to produce roughly 2,500 pounds of vegetables, translating to $7,300 in gross value and $3,000–$4,500 in grocery savings.
-- **Mid-tier growers** to double production while unlocking $9,000–$13,500 in household savings.
-- **High-optimization teams** to reach 7,500 pounds and more than $16,000 in annual savings.
+<div className={styles.imageRow}>
+  <div className={styles.imageCard}>
+    <img src={require('./market-value.svg').default} alt="Revenue and onboarding roadmap" loading="lazy" />
+  </div>
+  <div className={styles.imageCard}>
+    <img src={require('./infographic.svg').default} alt="Grow value, not just grass overview" loading="lazy" />
+  </div>
+</div>
 
-## Managing inputs with regenerative discipline
+<div className={styles.callout}>
+  <h3>Ready to convert lawn care into community wealth?</h3>
+  <p>
+    Join Agrinet’s federated agriculture network and tap into Fruitful templates, field-tested training, and blockchain-backed
+    accountability. We will help you transform $2,500 of annual lawn costs into $6,000–$13,500 of nutritious food and resilient
+    neighborhood value.
+  </p>
+  <ul className={styles.stepsList}>
+    <li>
+      <p>Book a Fruitful site walk to align on layout, guilds, and water strategy.</p>
+    </li>
+    <li>
+      <p>Activate PING to coordinate with local buyers and surplus partners.</p>
+    </li>
+    <li>
+      <p>Record every harvest in LBTAS and watch premiums grow.</p>
+    </li>
+  </ul>
+</div>
 
-![Input and method summary](./input-costs.svg)
-
-Designing for loops keeps costs predictable:
-
-- Drip irrigation and mulching retain moisture, while cisterns capture Louisville's seasonal rainfalls.
-- Composting, cover crops, and local nutrient exchanges maintain fertility without synthetic imports.
-- Row covers, beneficial insects, and low tunnels provide natural protection and shoulder-season supply.
-- Companion planting guilds—tomatoes with basil and marigolds, the Three Sisters mix, and quick greens successions—deliver 10–30% input savings.
-
-## Transparency that scales trust
-
-![Coordination and trust graphic](./fruitful-advantage.svg)
-
-The Fruitful Advantage combines three pillars:
-
-1. **Pre-plant coordination** with PING ensures each bed has a purpose before seeds go in the ground.
-2. **In-season transparency** keeps growers and buyers aligned on yields, issues, and availability.
-3. **Immutable blockchain records** through LBTAS reward accurate reporting and flag discrepancies early.
-
-## Monetizing surplus and onboarding neighbors
-
-![Revenue and onboarding roadmap](./market-value.svg)
-
-Combining Fruitful crop plans, PING transparency, and LBTAS settlement consistently unlocks a 25–40% premium compared with anonymous wholesale channels. A representative 2,500-square-foot yard nets $5,625 after waste reduction—about $3,875 better than paying for lawn upkeep.
-
-Getting started is straightforward:
-
-- Pilot a 500-square-foot micro-farm to test irrigation, soil amendments, and harvest cadence.
-- Coordinate with local buyers, CSA hosts, and mutual aid partners via Agrinet's directories.
-- Document every delivery and quality check in LBTAS to build a premium-ready ledger from day one.
-
-Ready to turn lawn care costs into community wealth? Join the Agrinet federated agriculture network and tap into Fruitful's templates, training, and blockchain backed accountability.
-
+<p>Need a visual walkthrough? Download the full conversion playbook or <strong><a href="https://ntri.org/fruitful" target="_blank" rel="noreferrer">book time with our team</a></strong> to join the Agrinet network.</p>
