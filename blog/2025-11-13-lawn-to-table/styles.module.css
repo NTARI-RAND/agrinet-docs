@@ -1,0 +1,271 @@
+:root {
+  --lawn-green: #1f3a24;
+  --sprout: #e8f0e5;
+  --soil: #f4ede1;
+  --sunrise: #f9f3da;
+  --accent: #c46b2a;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--lawn-green) 0%, #355836 100%);
+  color: #fdfcf7;
+  padding: 3rem clamp(1.5rem, 4vw, 4rem);
+  border-radius: 28px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(17, 53, 24, 0.35);
+  margin-bottom: 3rem;
+}
+
+.heroKicker {
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  margin-bottom: 2rem;
+}
+
+.heroMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.metaChip {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.heroFigure {
+  margin: 0;
+}
+
+.heroFigure img {
+  width: min(720px, 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 40px rgba(14, 41, 20, 0.45);
+}
+
+.section {
+  background: var(--soil);
+  border-radius: 24px;
+  padding: clamp(1.75rem, 2.5vw, 2.75rem);
+  margin-bottom: 2.5rem;
+  box-shadow: 0 16px 42px rgba(31, 58, 36, 0.16);
+}
+
+.sectionHeader {
+  max-width: 720px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.sectionHeader h2 {
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+  color: var(--lawn-green);
+  margin-bottom: 1rem;
+}
+
+.sectionHeader p {
+  color: #3d4a36;
+  font-size: 1.05rem;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.metricCard {
+  background: white;
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 12px 26px rgba(30, 49, 37, 0.12);
+}
+
+.metricCard dt {
+  font-weight: 700;
+  color: var(--lawn-green);
+  margin-bottom: 0.5rem;
+}
+
+.metricCard dd {
+  margin: 0;
+  color: #3d4a36;
+}
+
+.figure {
+  margin: 0;
+  text-align: center;
+}
+
+.figure img {
+  width: min(560px, 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(31, 58, 36, 0.1);
+  box-shadow: 0 16px 36px rgba(31, 58, 36, 0.15);
+}
+
+.figure figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  color: #4f5c4a;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+.valueTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(31, 58, 36, 0.12);
+}
+
+.valueTable th,
+.valueTable td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+}
+
+.valueTable thead {
+  background: var(--lawn-green);
+  color: #fdfcf7;
+  font-size: 0.95rem;
+}
+
+.valueTable tbody tr:nth-child(even) {
+  background: #f5f1e6;
+}
+
+.valueTable tbody tr:nth-child(odd) {
+  background: white;
+}
+
+.detailList {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.detailList li {
+  position: relative;
+  padding-left: 1.5rem;
+  color: #3d4a36;
+}
+
+.detailList li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(196, 107, 42, 0.2);
+}
+
+.cardList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 12px 28px rgba(31, 58, 36, 0.12);
+}
+
+.card h3 {
+  margin-top: 0;
+  color: var(--lawn-green);
+  font-size: 1.1rem;
+}
+
+.card p {
+  margin-bottom: 0;
+  color: #3d4a36;
+}
+
+.stepList {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.stepList ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #3d4a36;
+  font-size: 1.05rem;
+}
+
+.cta {
+  background: linear-gradient(135deg, var(--sunrise), var(--sprout));
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: inset 0 0 0 1px rgba(31, 58, 36, 0.08), 0 16px 34px rgba(31, 58, 36, 0.14);
+}
+
+.cta h3 {
+  margin-top: 0;
+  color: var(--lawn-green);
+}
+
+.cta p {
+  color: #3d4a36;
+  margin-bottom: 0.85rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+  color: #3d4a36;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .heroMeta {
+    gap: 0.5rem;
+  }
+
+  .metaChip {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+  }
+
+  .section {
+    border-radius: 20px;
+  }
+}
