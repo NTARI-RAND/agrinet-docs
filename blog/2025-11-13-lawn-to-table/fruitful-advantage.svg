@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">
+  <rect width="1200" height="1600" fill="#f6f0e5" />
+  <rect width="1200" height="220" fill="#3a5b46" />
+  <text x="600" y="140" font-family="'DejaVu Sans', Arial, sans-serif" font-size="64" fill="#ffffff" text-anchor="middle">
+    The Fruitful Advantage
+  </text>
+  <text x="600" y="200" font-family="'DejaVu Sans', Arial, sans-serif" font-size="36" fill="#ffffff" text-anchor="middle">
+    Coordination • Transparency • Trust
+  </text>
+  <text x="80" y="320" font-family="'DejaVu Sans', Arial, sans-serif" font-size="44" fill="#ac7b43">
+    Pre-Plant Coordination
+  </text>
+  <text x="120" y="390" font-family="'DejaVu Sans', Arial, sans-serif" font-size="34" fill="#333333">
+    • PING guides crop layout before you plant for balanced guilds
+  </text>
+  <text x="120" y="450" font-family="'DejaVu Sans', Arial, sans-serif" font-size="34" fill="#333333">
+    • Weekly updates align schedules, inputs, and harvest targets
+  </text>
+  <text x="80" y="530" font-family="'DejaVu Sans', Arial, sans-serif" font-size="44" fill="#ac7b43">
+    Transparency While Growing
+  </text>
+  <text x="120" y="600" font-family="'DejaVu Sans', Arial, sans-serif" font-size="34" fill="#333333">
+    • PING shares live bed status, expected yields, and issue alerts
+  </text>
+  <text x="80" y="680" font-family="'DejaVu Sans', Arial, sans-serif" font-size="44" fill="#ac7b43">
+    Blockchain Recording with LBTAS
+  </text>
+  <text x="120" y="750" font-family="'DejaVu Sans', Arial, sans-serif" font-size="34" fill="#333333">
+    • Immutable ledger tracks variety, harvest date, condition, and delivery
+  </text>
+  <text x="120" y="810" font-family="'DejaVu Sans', Arial, sans-serif" font-size="34" fill="#333333">
+    • Rewards accurate reporting and flags poor quality for remediation
+  </text>
+</svg>
