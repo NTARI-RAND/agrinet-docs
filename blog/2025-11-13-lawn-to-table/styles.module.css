@@ -241,7 +241,8 @@
   display: block;
 }
 
-.illustration img {
+.illustration img,
+.illustration svg {
   display: block;
   width: 100%;
   height: auto;
@@ -262,7 +263,14 @@
   background: #fff;
 }
 
-.imageCard img {
+.imageCard img,
+.imageCard svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.imageSvg {
   width: 100%;
   height: auto;
   display: block;
