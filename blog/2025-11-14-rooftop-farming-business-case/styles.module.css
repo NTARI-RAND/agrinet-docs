@@ -1,0 +1,275 @@
+.hero {
+  background: linear-gradient(135deg, #1b3f5c 0%, #205972 45%, #3a8a96 100%);
+  color: #f5fbff;
+  border-radius: 24px;
+  padding: 3rem 3.5rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 22px 48px rgba(17, 53, 79, 0.35);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.25), transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.18), transparent 60%);
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.75rem;
+  max-width: 62rem;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.heroTitle {
+  font-size: clamp(2.75rem, 3.5vw, 3.6rem);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1.6;
+  margin: 0;
+  color: rgba(245, 251, 255, 0.88);
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245, 251, 255, 0.75);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.section {
+  margin: 3.5rem 0;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #0f324c;
+}
+
+.sectionTitle span {
+  display: block;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #3a8a96;
+  margin-bottom: 0.35rem;
+}
+
+.sectionBody {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: 0 18px 36px rgba(15, 50, 76, 0.12);
+  border: 1px solid rgba(15, 50, 76, 0.12);
+  display: grid;
+  gap: 0.85rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.cardBadge {
+  background: rgba(58, 138, 150, 0.16);
+  color: #205972;
+  border-radius: 999px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #103a57;
+}
+
+.cardList {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: #315064;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.cardHighlight {
+  font-size: 1.1rem;
+  color: #103a57;
+  margin: 0;
+}
+
+.briefingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.briefingCard {
+  background: linear-gradient(135deg, rgba(58, 138, 150, 0.12), rgba(58, 138, 150, 0.05));
+  border-radius: 18px;
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.6rem 1.75rem;
+  border: 1px solid rgba(31, 84, 114, 0.18);
+  box-shadow: 0 16px 30px rgba(17, 53, 79, 0.1);
+  border-top: 5px solid var(--accent, #3a8a96);
+}
+
+.briefingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(48, 104, 130, 0.18);
+  color: var(--accent, #3a8a96);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.briefingTitle {
+  font-size: 1.15rem;
+  margin: 0;
+  color: #103a57;
+}
+
+.briefingText {
+  margin: 0;
+  color: #345569;
+  font-size: 0.98rem;
+}
+
+.timeline {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.timelineStep {
+  background: linear-gradient(120deg, rgba(58, 138, 150, 0.12), rgba(32, 89, 114, 0.18));
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(32, 89, 114, 0.22);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.timelineLabel {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #205972;
+}
+
+.timelineTitle {
+  font-size: 1.25rem;
+  margin: 0;
+  color: #0f324c;
+}
+
+.timelineText {
+  margin: 0;
+  color: #264c63;
+}
+
+.cta {
+  margin: 4rem 0 2rem;
+  background: #103a57;
+  color: #f5fbff;
+  border-radius: 22px;
+  padding: 2.75rem 3rem;
+  display: grid;
+  gap: 1.1rem;
+  box-shadow: 0 26px 44px rgba(16, 58, 87, 0.38);
+}
+
+.cta h3 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+}
+
+.cta p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: rgba(245, 251, 255, 0.88);
+}
+
+.ctaList {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: rgba(245, 251, 255, 0.88);
+  display: grid;
+  gap: 0.35rem;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 2.5rem;
+  }
+
+  .section {
+    margin: 2.5rem 0;
+  }
+
+  .cta {
+    padding: 2.25rem;
+  }
+}
