@@ -168,6 +168,7 @@ const config = {
             position: "left",
             label: "Tutorial",
           },
+          { to: "/docs/versions", label: "Versions", position: "left" },
           { to: "/blog", label: "Blog", position: "left" },
           {
             to: "/translations",
@@ -202,6 +203,8 @@ const config = {
               { label: "Onboarding", to: "/docs/onboarding" },
               { label: "Federation Guide", to: "/docs/federation-node-guide" },
               { label: "API Testing", to: "/docs/api-testing" },
+              { label: "Versions", to: "/docs/versions" },
+              { label: "Release notes", to: "/docs/releases/1.1.0" },
             ],
           },
           {

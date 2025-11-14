@@ -33,6 +33,12 @@ const sidebars = {
     "onboarding",
     "api-testing",
     "chat-ui",
+    "versions",
+    {
+      type: "category",
+      label: "Releases",
+      items: ["releases/1.1.0"],
+    },
     {
       type: "category",
       label: "Tutorial",

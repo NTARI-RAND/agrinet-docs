@@ -7,7 +7,7 @@ description: Find the right Agrinet documentation release and learn how to publi
 
 # Versions
 
-This page lists documentation versions for Agrinet Docs and helps you find the right docs for a given release.
+You are viewing the **Agrinet Docs 1.1** snapshot. Use this page to find the right documentation set for your release and follow the workflow for publishing future versions.
 
 - Current (stable): **1.1.0 (Nov 2, 2025)**  
   - Snapshot: /version-1.1/  
@@ -29,7 +29,7 @@ Older versions
 
 How to use these docs
 - If you are running Agrinet v1.1.x, use the "1.1" version in the Docusaurus version dropdown or browse the versioned docs at `/version-1.1/`.
-- If you are contributing documentation, edit files in `docs/` (these feed the "Next" version). To create a new versioned snapshot, run:
+- If you are contributing documentation for future releases, edit files in `docs/` (these feed the "Next" version). To create a new versioned snapshot, run:
 
 ```bash
 # generate a new docs snapshot (run from repo root)
