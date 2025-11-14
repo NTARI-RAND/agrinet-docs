@@ -1,4 +1,7 @@
 # Build on PRs, build+deploy on push to main (GitHub Pages via actions-gh-pages).
+permissions:
+  contents: write
+
 on:
   push:
     branches: [main]
