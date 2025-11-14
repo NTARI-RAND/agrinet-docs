@@ -8,6 +8,13 @@ description: Convert Louisville lawns into productive micro-farms with Fruitful 
 ---
 
 import styles from './styles.module.css';
+import OverviewGraphic from './overview.svg';
+import LawnToTableGraphic from './lawn_table.png';
+import IntensiveFarmingGraphic from './intensive-farming.svg';
+import InputCostsGraphic from './input-costs.svg';
+import FruitfulAdvantageGraphic from './fruitful-advantage.svg';
+import MarketValueGraphic from './market-value.svg';
+import InfographicGraphic from './infographic.svg';
 
 <div className={styles.hero}>
   <div className={styles.heroContent}>
@@ -67,10 +74,10 @@ import styles from './styles.module.css';
 
 <div className={styles.imageRow}>
   <div className={styles.imageCard}>
-    <img src={require('./overview.svg').default} alt="Cost comparison overview" loading="lazy" />
+    <OverviewGraphic role="img" aria-label="Cost comparison overview" className={styles.imageSvg} />
   </div>
   <div className={styles.imageCard}>
-    <img src={require('./lawn_table.png').default} alt="Lawn to table infographic" loading="lazy" />
+    <img src={LawnToTableGraphic} alt="Lawn to table infographic" loading="lazy" />
   </div>
 </div>
 
@@ -116,10 +123,14 @@ import styles from './styles.module.css';
 
 <div className={styles.imageRow}>
   <div className={styles.imageCard}>
-    <img src={require('./intensive-farming.svg').default} alt="High-yield scenarios for Louisville" loading="lazy" />
+    <IntensiveFarmingGraphic
+      role="img"
+      aria-label="High-yield scenarios for Louisville"
+      className={styles.imageSvg}
+    />
   </div>
   <div className={styles.imageCard}>
-    <img src={require('./input-costs.svg').default} alt="Input and method summary" loading="lazy" />
+    <InputCostsGraphic role="img" aria-label="Input and method summary" className={styles.imageSvg} />
   </div>
 </div>
 
@@ -186,7 +197,11 @@ import styles from './styles.module.css';
 </section>
 
 <div className={styles.illustration}>
-  <img src={require('./fruitful-advantage.svg').default} alt="Fruitful coordination and trust graphic" loading="lazy" />
+  <FruitfulAdvantageGraphic
+    role="img"
+    aria-label="Fruitful coordination and trust graphic"
+    className={styles.imageSvg}
+  />
 </div>
 
 <section className={styles.section}>
@@ -222,10 +237,10 @@ import styles from './styles.module.css';
 
 <div className={styles.imageRow}>
   <div className={styles.imageCard}>
-    <img src={require('./market-value.svg').default} alt="Revenue and onboarding roadmap" loading="lazy" />
+    <MarketValueGraphic role="img" aria-label="Revenue and onboarding roadmap" className={styles.imageSvg} />
   </div>
   <div className={styles.imageCard}>
-    <img src={require('./infographic.svg').default} alt="Grow value, not just grass overview" loading="lazy" />
+    <InfographicGraphic role="img" aria-label="Grow value, not just grass overview" className={styles.imageSvg} />
   </div>
 </div>
 
