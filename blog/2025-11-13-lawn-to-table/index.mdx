@@ -140,20 +140,42 @@ import InfographicGraphic from './infographic.svg';
       <article className={styles.infoCard}>
         <h3>Weekly crop mix</h3>
         <p className={styles.infoLead}>Successive plantings balance staples with high-value crops.</p>
-        <ul className={styles.stripedList}>
-          <li>
-            <strong>Herbs</strong>: Twice-weekly harvests for garnishes, infusions, and CSA add-ons.
-          </li>
-          <li>
-            <strong>Veggies</strong>: Root and fruit crops rotate every 3–5 weeks for dependable bulk volume.
-          </li>
-          <li>
-            <strong>Fruits</strong>: Berries and trellised crops extend revenue deeper into the season.
-          </li>
-          <li>
-            <strong>Greens</strong>: Quick-turn beds keep salad mix on the calendar between larger harvests.
-          </li>
-        </ul>
+        <table className={styles.flatTable}>
+          <thead>
+            <tr>
+              <th scope="col">Crop lane</th>
+              <th scope="col">Harvest tempo</th>
+              <th scope="col">Primary outlets</th>
+              <th scope="col">Weekly share of beds</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Herbs</th>
+              <td>Cut twice per week to keep tender growth.</td>
+              <td>CSA bundles, garnish kits, and infusion partners.</td>
+              <td>20%</td>
+            </tr>
+            <tr>
+              <th scope="row">Veggies</th>
+              <td>Flipped every 3–5 weeks for steady bulk volume.</td>
+              <td>Neighborhood grocers and prepared meal programs.</td>
+              <td>35%</td>
+            </tr>
+            <tr>
+              <th scope="row">Fruits</th>
+              <td>Staggered berry and trellis harvests throughout the season.</td>
+              <td>Chef pre-orders and weekend markets.</td>
+              <td>15%</td>
+            </tr>
+            <tr>
+              <th scope="row">Greens</th>
+              <td>Fast 18–24 day cycles between major flips.</td>
+              <td>Salad subscriptions and mutual aid deliveries.</td>
+              <td>30%</td>
+            </tr>
+          </tbody>
+        </table>
       </article>
       <article className={styles.infoCard}>
         <h3>Community dividends</h3>
@@ -432,32 +454,41 @@ import InfographicGraphic from './infographic.svg';
       </article>
       <article className={styles.infoCard}>
         <h3>Grow Value framework</h3>
-        <div className={styles.pillarList}>
-          <div>
-            <h4>From expense to ecosystem</h4>
-            <p>Redirect lawn budgets toward soil health, pollinators, and water loops tracked in Agrinet.</p>
-          </div>
-          <div>
-            <h4>Intensive farming alternative</h4>
-            <p>Guild-based planting, succession sowing, and season extension keep beds productive.</p>
-          </div>
-          <div>
-            <h4>Revenue potential</h4>
-            <p>$6k–$13.5k annual value plus carbon credits and blockchain-backed trust.</p>
-          </div>
-          <div>
-            <h4>Lawn conversion</h4>
-            <p>Map water, solar, and soil assets, install raised beds, and capture rainwater into cisterns.</p>
-          </div>
-          <div>
-            <h4>Community trust</h4>
-            <p>Transparent supply records connect neighbors, chefs, and aid partners.</p>
-          </div>
-          <div>
-            <h4>Federated network</h4>
-            <p>Agrinet links producers and buyers with shared playbooks and verifiable contracts.</p>
-          </div>
-        </div>
+        <p className={styles.infoLead}>Each pillar shows how the conversion shifts routine lawn spend into durable neighborhood returns.</p>
+        <table className={styles.flatTable}>
+          <thead>
+            <tr>
+              <th scope="col">Pillar</th>
+              <th scope="col">What it delivers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">From expense to ecosystem</th>
+              <td>Redirect budgets into soil health, pollinator habitat, and water capture logged inside Agrinet.</td>
+            </tr>
+            <tr>
+              <th scope="row">Intensive farming alternative</th>
+              <td>Guild-based planting, succession sowing, and season extension keep every bed productive.</td>
+            </tr>
+            <tr>
+              <th scope="row">Revenue potential</th>
+              <td>$6k–$13.5k annual value plus carbon credits and blockchain-backed price premiums.</td>
+            </tr>
+            <tr>
+              <th scope="row">Lawn conversion</th>
+              <td>Map sun, soil, and water assets, then install raised beds and cistern-fed drip infrastructure.</td>
+            </tr>
+            <tr>
+              <th scope="row">Community trust</th>
+              <td>Shared ledgers and delivery confirmations connect neighbors, chefs, and aid partners.</td>
+            </tr>
+            <tr>
+              <th scope="row">Federated network</th>
+              <td>Agrinet links producers and buyers with reusable playbooks and verifiable contracts.</td>
+            </tr>
+          </tbody>
+        </table>
       </article>
     </div>
   </section>
