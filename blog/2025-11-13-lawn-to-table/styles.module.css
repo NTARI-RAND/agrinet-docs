@@ -1,9 +1,21 @@
+.page {
+  width: 100%;
+  max-width: var(--ifm-container-width, 960px);
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+  display: grid;
+  gap: 3rem;
+}
+
+.page > * {
+  margin: 0;
+}
+
 .hero {
   background: linear-gradient(135deg, #24543e 0%, #2f6f4c 50%, #5a8941 100%);
   color: #fff;
   border-radius: 20px;
   padding: 3rem 3.5rem;
-  margin-bottom: 2.5rem;
   box-shadow: 0 20px 40px rgba(19, 52, 33, 0.3);
   position: relative;
   overflow: hidden;
@@ -73,100 +85,186 @@
   color: #fff;
 }
 
+
 .section {
-  margin: 3rem 0;
-}
-
-.sectionTitle {
-  font-size: 1.85rem;
-  margin-bottom: 1.5rem;
-  color: #214a36;
-}
-
-.sectionTitle span {
-  display: block;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #5a8941;
-  font-weight: 600;
-}
-
-.twoColumn {
+  margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.75rem;
+  gap: 2rem;
+}
+
+.sectionHeading {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  font-size: clamp(2rem, 2.5vw, 2.35rem);
+  color: #214a36;
+  letter-spacing: -0.01em;
+}
+
+.sectionHeading p {
+  margin: 0;
+  color: #4a5b52;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.splitContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.25rem;
   align-items: start;
 }
 
-.card {
+.sectionColumn,
+.sectionAside {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.sectionAside {
+  background: linear-gradient(135deg, rgba(47, 111, 76, 0.08), rgba(90, 137, 65, 0.16));
+  border: 1px solid rgba(47, 111, 76, 0.18);
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: 0 14px 28px rgba(33, 74, 54, 0.12);
+}
+
+.subheading {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #24543e;
+  letter-spacing: -0.01em;
+}
+
+.featureList {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.65rem;
+  color: #3e4c45;
+  line-height: 1.55;
+}
+
+.featureList li::marker {
+  color: #2f6f4c;
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.98rem;
+  line-height: 1.4;
+  color: #2f3c36;
   background: #fff;
   border-radius: 16px;
-  padding: 1.75rem;
-  box-shadow: 0 12px 28px rgba(33, 74, 54, 0.12);
-  border: 1px solid rgba(33, 74, 54, 0.08);
-  display: grid;
-  gap: 0.85rem;
+  overflow: hidden;
+  box-shadow: 0 12px 26px rgba(33, 74, 54, 0.12);
 }
 
-.cardHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.cardBadge {
-  background: rgba(90, 137, 65, 0.15);
-  color: #2f6f4c;
-  border-radius: 999px;
-  padding: 0.25rem 0.9rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.08em;
+.dataTable thead {
+  background: linear-gradient(135deg, rgba(36, 84, 62, 0.92), rgba(47, 111, 76, 0.92));
+  color: #f5f7f1;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
-.cardTitle {
-  font-size: 1.35rem;
-  color: #214a36;
-  margin: 0;
+.dataTable th,
+.dataTable td {
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(47, 111, 76, 0.12);
 }
 
-.cardList {
-  margin: 0;
-  padding-left: 1.1rem;
-  display: grid;
-  gap: 0.35rem;
-  color: #3e4c45;
+.dataTable tbody tr:last-child th,
+.dataTable tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.statGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.25rem;
-  margin-top: 1.5rem;
-}
-
-.statCard {
-  background: linear-gradient(120deg, rgba(47, 111, 76, 0.12), rgba(90, 137, 65, 0.2));
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid rgba(47, 111, 76, 0.25);
-  display: grid;
-  gap: 0.35rem;
-}
-
-.statCard strong {
-  font-size: 1.2rem;
+.dataTable tbody th {
+  font-weight: 600;
   color: #214a36;
 }
 
-.miniList {
+.metricList {
+  list-style: none;
   margin: 0;
-  padding-left: 1.1rem;
-  color: #3e4c45;
+  padding: 0;
   display: grid;
-  gap: 0.25rem;
+  gap: 1.1rem;
+}
+
+.metricList li {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1d3f2c;
+  letter-spacing: -0.01em;
+}
+
+.metricLabel {
+  font-size: 0.98rem;
+  color: #2f3c36;
+  line-height: 1.45;
+}
+
+.helperText {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #3e4c45;
+  line-height: 1.55;
+}
+
+.figureGrid {
+  display: grid;
+  gap: 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.figure {
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid rgba(33, 74, 54, 0.12);
+  box-shadow: 0 16px 30px rgba(33, 74, 54, 0.14);
+  overflow: hidden;
+  display: grid;
+}
+
+.figure img,
+.figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.figureCaption {
+  margin: 0;
+  padding: 1rem 1.25rem 1.25rem;
+  font-size: 0.95rem;
+  color: #3e4c45;
+  line-height: 1.5;
+}
+
+.stepList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+  color: #3a4a41;
+  line-height: 1.55;
+}
+
+.stepList li::marker {
+  font-weight: 600;
+  color: #2f6f4c;
 }
 
 .callout {
@@ -174,7 +272,6 @@
   color: #f7f5eb;
   border-radius: 18px;
   padding: 2.25rem 2.5rem;
-  margin: 4rem 0 2rem;
   display: grid;
   gap: 1rem;
   box-shadow: 0 18px 32px rgba(16, 43, 29, 0.35);
@@ -231,50 +328,51 @@
   color: rgba(247, 245, 235, 0.92);
 }
 
-
-.illustration {
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 16px 28px rgba(30, 64, 46, 0.2);
-  border: 1px solid rgba(47, 111, 76, 0.2);
-  margin: 3rem 0;
-  display: block;
-}
-
-.illustration img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.imageRow {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  margin: 2.5rem 0;
-}
-
-.imageCard {
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(33, 74, 54, 0.14);
-  box-shadow: 0 12px 24px rgba(33, 74, 54, 0.12);
-  background: #fff;
-}
-
-.imageCard img {
+.imageSvg {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.footerText {
+  font-size: 1.05rem;
+  color: #2c4a38;
+  line-height: 1.65;
+}
+
+.footerText strong {
+  font-weight: 600;
+}
+
+.footerText a {
+  color: #2f6f4c;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
 }
 
 @media (max-width: 600px) {
+  .page {
+    padding: 0 1rem 3rem;
+    gap: 2.5rem;
+  }
+
   .hero {
     padding: 2.5rem 2rem;
   }
 
-  .card {
+  .splitContent {
+    gap: 1.75rem;
+  }
+
+  .sectionAside {
     padding: 1.5rem;
+  }
+
+  .dataTable th,
+  .dataTable td {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.88rem;
   }
 
   .callout {
