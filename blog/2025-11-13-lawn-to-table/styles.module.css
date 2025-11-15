@@ -351,6 +351,23 @@
   text-underline-offset: 4px;
 }
 
+.footerText {
+  font-size: 1.05rem;
+  color: #2c4a38;
+  line-height: 1.65;
+}
+
+.footerText strong {
+  font-weight: 600;
+}
+
+.footerText a {
+  color: #2f6f4c;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
 @media (max-width: 600px) {
   .page {
     padding: 0 1rem 3rem;
