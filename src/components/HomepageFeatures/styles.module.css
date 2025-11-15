@@ -5,7 +5,58 @@
   width: 100%;
 }
 
+.featureColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.featureIllustrationWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .featureSvg {
   height: 200px;
   width: 200px;
+}
+
+.featureCopy {
+  max-width: 56ch;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+.featureHeading {
+  margin-bottom: 0.75rem;
+}
+
+.featureCopy p {
+  margin: 0 auto;
+}
+
+@media (max-width: 996px) {
+  .featureCopy {
+    max-width: 48ch;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .featureSvg {
+    max-height: 40vh;
+    height: auto;
+    width: clamp(120px, 48vw, 180px);
+  }
+
+  .featureCopy {
+    max-width: 44ch;
+  }
+
+  .featureHeading {
+    font-size: 1.6rem;
+  }
 }
