@@ -496,6 +496,38 @@
     padding: 0.75rem 0.85rem;
   }
 
+  .dataTable th,
+  .dataTable td {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.88rem;
+  }
+
+  .infoGrid {
+    gap: 1.25rem;
+  }
+
+  .infoCard {
+    padding: 1.5rem 1.65rem;
+  }
+
+  .summaryCard {
+    padding: 1.75rem 1.85rem;
+  }
+
+  .simpleTable th,
+  .simpleTable td {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .timelineList li {
+    padding: 0.85rem 1rem 0.85rem 3rem;
+  }
+
+  .timelineList li::before {
+    left: 0.9rem;
+    top: 0.9rem;
+  }
+
   .callout {
     padding: 2rem;
   }
