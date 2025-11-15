@@ -25,3 +25,43 @@ tooling:
 preview:
   label: Preview
   permalink: /blog/tags/preview
+
+agrinet:
+  label: Agrinet
+  permalink: /blog/tags/agrinet
+
+fruitful:
+  label: Fruitful
+  permalink: /blog/tags/fruitful
+
+dynamic-csa:
+  label: Dynamic CSA
+  permalink: /blog/tags/dynamic-csa
+
+ping:
+  label: PING Transparency
+  permalink: /blog/tags/ping
+
+kentucky:
+  label: Kentucky
+  permalink: /blog/tags/kentucky
+
+rooftops:
+  label: Rooftops
+  permalink: /blog/tags/rooftops
+
+commercial-agriculture:
+  label: Commercial Agriculture
+  permalink: /blog/tags/commercial-agriculture
+
+lawn-conversion:
+  label: Lawn Conversion
+  permalink: /blog/tags/lawn-conversion
+
+louisville:
+  label: Louisville
+  permalink: /blog/tags/louisville
+
+surplus-management:
+  label: Surplus Management
+  permalink: /blog/tags/surplus-management

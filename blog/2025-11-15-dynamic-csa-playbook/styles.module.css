@@ -1,0 +1,303 @@
+.page {
+  display: grid;
+  gap: 3rem;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0c3f65, #166a7c 45%, #1ea39a);
+  color: #f5fbff;
+  border-radius: 28px;
+  padding: 3rem 3.5rem;
+  box-shadow: 0 24px 48px rgba(5, 34, 58, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.25), transparent 55%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.18), transparent 65%);
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+.heroTitle {
+  margin: 0;
+  font-size: clamp(2.75rem, 4vw, 3.8rem);
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  margin: 0;
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  line-height: 1.6;
+  color: rgba(245, 251, 255, 0.9);
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.statLabel {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  color: rgba(245, 251, 255, 0.75);
+}
+
+.statValue {
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.section {
+  margin: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.sectionHeading {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sectionHeading span {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1ea39a;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: #0b2c42;
+}
+
+.sectionHeading p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #284354;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1.75rem;
+  border: 1px solid rgba(12, 63, 101, 0.1);
+  box-shadow: 0 20px 40px rgba(6, 24, 38, 0.08);
+  display: grid;
+  gap: 0.65rem;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #0f3a57;
+}
+
+.card p {
+  margin: 0;
+  color: #3a4f5c;
+  line-height: 1.55;
+}
+
+.card ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #3a4f5c;
+  line-height: 1.55;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 30px rgba(11, 44, 66, 0.08);
+}
+
+.dataTable thead {
+  background: #e8f6f2;
+  color: #0f3a57;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+}
+
+.dataTable th,
+.dataTable td {
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(15, 58, 87, 0.08);
+  text-align: left;
+}
+
+.dataTable tbody th {
+  font-weight: 600;
+  color: #0b2c42;
+}
+
+.metricList {
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+}
+
+.metricList li {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.metricValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0f3a57;
+}
+
+.metricLabel {
+  color: #425561;
+  font-size: 0.98rem;
+}
+
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.processCard {
+  border: 1px solid rgba(12, 63, 101, 0.12);
+  border-radius: 18px;
+  padding: 1.5rem;
+  display: grid;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(30, 163, 154, 0.08), rgba(11, 44, 66, 0.02));
+}
+
+.processCard span {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #1ea39a;
+}
+
+.processCard h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #0b2c42;
+}
+
+.processCard p,
+.processCard ul {
+  margin: 0;
+  color: #324554;
+  line-height: 1.5;
+}
+
+.highlightPanel {
+  border-left: 4px solid #1ea39a;
+  padding: 1rem 1.5rem;
+  background: #f3fbfa;
+  border-radius: 16px;
+  color: #294754;
+  line-height: 1.6;
+}
+
+.timeline {
+  display: grid;
+  gap: 1rem;
+}
+
+.timelineStep {
+  border: 1px solid rgba(12, 63, 101, 0.12);
+  border-radius: 18px;
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  box-shadow: 0 12px 22px rgba(9, 33, 52, 0.08);
+}
+
+.timelineStep h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #0f3a57;
+}
+
+.timelineStep p {
+  margin: 0.4rem 0 0;
+  color: #3a4f5c;
+}
+
+.bottomLine {
+  border-radius: 24px;
+  background: linear-gradient(120deg, #0b2c42, #1ea39a);
+  color: #f5fbff;
+  padding: 2.5rem 3rem;
+  display: grid;
+  gap: 0.85rem;
+  box-shadow: 0 24px 48px rgba(5, 34, 58, 0.25);
+}
+
+.bottomLine h2 {
+  margin: 0;
+  font-size: 2.2rem;
+}
+
+.bottomLine p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 2.25rem;
+  }
+}
