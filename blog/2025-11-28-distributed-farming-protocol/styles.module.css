@@ -1,0 +1,279 @@
+.hero {
+  background: linear-gradient(135deg, #1f2e4d 0%, #254c6d 45%, #3a9a9f 100%);
+  color: #f5fbff;
+  border-radius: 24px;
+  padding: 3rem 3.5rem;
+  margin-bottom: 3.25rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 22px 48px rgba(12, 36, 64, 0.32);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.2), transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.18), transparent 55%);
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.6rem;
+  max-width: 64rem;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.9rem;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.heroTitle {
+  font-size: clamp(2.75rem, 4vw, 3.75rem);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  line-height: 1.6;
+  margin: 0;
+  color: rgba(245, 251, 255, 0.88);
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  display: grid;
+  gap: 0.45rem;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245, 251, 255, 0.75);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.statNote {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(245, 251, 255, 0.9);
+}
+
+.section {
+  margin: 3.5rem 0;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #10304b;
+}
+
+.sectionBody {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.65rem;
+  box-shadow: 0 18px 36px rgba(15, 50, 76, 0.12);
+  border: 1px solid rgba(15, 50, 76, 0.12);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.cardBadge {
+  background: rgba(58, 138, 150, 0.16);
+  color: #205972;
+  border-radius: 999px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #103a57;
+}
+
+.cardHighlight {
+  font-size: 1.05rem;
+  color: #103a57;
+  margin: 0;
+}
+
+.cardText {
+  margin: 0;
+  color: #345569;
+  line-height: 1.6;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.column {
+  display: grid;
+  gap: 1rem;
+}
+
+.metricList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.metricValue {
+  display: block;
+  font-weight: 700;
+  color: #184263;
+}
+
+.metricLabel {
+  color: #3f6074;
+  line-height: 1.5;
+}
+
+.noteCard {
+  background: linear-gradient(135deg, rgba(58, 138, 150, 0.08), rgba(37, 76, 109, 0.08));
+  border-radius: 16px;
+  padding: 1.4rem 1.5rem;
+  border: 1px solid rgba(16, 48, 75, 0.1);
+  box-shadow: 0 12px 26px rgba(14, 48, 76, 0.1);
+  color: #23475f;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.briefingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.1rem;
+}
+
+.briefingCard {
+  background: linear-gradient(135deg, rgba(58, 138, 150, 0.12), rgba(58, 138, 150, 0.05));
+  border-radius: 18px;
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.55rem 1.65rem;
+  border: 1px solid rgba(31, 84, 114, 0.16);
+  box-shadow: 0 16px 30px rgba(17, 53, 79, 0.1);
+  border-top: 5px solid var(--accent, #3a8a96);
+}
+
+.briefingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(48, 104, 130, 0.18);
+  color: var(--accent, #3a8a96);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.briefingTitle {
+  font-size: 1.1rem;
+  margin: 0;
+  color: #103a57;
+}
+
+.briefingText {
+  margin: 0;
+  color: #345569;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.timeline {
+  display: grid;
+  gap: 1.25rem;
+  padding-left: 0.5rem;
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem 1rem;
+  align-items: start;
+}
+
+.timelineDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #3a8a96;
+  margin-top: 6px;
+  box-shadow: 0 0 0 6px rgba(58, 138, 150, 0.15);
+}
+
+.timelineLabel {
+  margin: 0;
+  font-weight: 700;
+  color: #184263;
+}
+
+.timelineText {
+  margin: 0;
+  color: #3f6074;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 2.25rem 1.75rem;
+  }
+
+  .heroStats {
+    grid-template-columns: 1fr;
+  }
+}
